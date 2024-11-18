@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Menú lateral -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Dashboard" class="nav-link active" aria-current="page">
+                            <i class="bi bi-house-door"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="CatalogoLugares" class="nav-link">
+                            <i class="bi bi-search"></i> Consultar Disponibilidad
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Usuario" asp-action="Logout" class="nav-link text-danger">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <h2>Bienvenido, @ViewData["UsuarioNombre"]</h2>
+            <p>Esta es la página principal protegida, accesible solo si estás logueado.</p>
+        </main>
+    </div>
+</div>

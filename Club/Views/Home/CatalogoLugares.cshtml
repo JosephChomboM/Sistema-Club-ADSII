@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Club.Models.Lugar>
+
+@{
+    ViewData["Title"] = "Catálogo de Lugares";
+}
+
+<h2>Consultar Disponibilidad</h2>
+
+<div class="row">
+    @foreach (var lugar in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@lugar.Nombre</h5>
+                    <p class="card-text">@lugar.Direccion</p>
+                    <a asp-controller="Home" asp-action="DetalleLugar" asp-route-id="@lugar.LugarId" class="btn btn-primary">Ver Detalle</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

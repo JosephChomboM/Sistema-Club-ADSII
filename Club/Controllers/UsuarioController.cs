@@ -21,7 +21,6 @@ namespace Club.Controllers
             return View();
         }
 
-        // Procesar el inicio de sesión
         [HttpPost]
         public IActionResult Login(string email, string contrasena)
         {
@@ -46,10 +45,14 @@ namespace Club.Controllers
                 return View();
             }
 
-            // Simular el inicio de sesión exitoso (en sistemas reales, usa cookies o autenticación)
-            TempData["Mensaje"] = $"¡Bienvenido, {usuario.Nombre}!";
-            return RedirectToAction("InicioExitoso");
+            // Guardar datos del usuario en la sesión
+            HttpContext.Session.SetString("UsuarioId", usuario.UsuarioId.ToString());
+            HttpContext.Session.SetString("UsuarioNombre", usuario.Nombre);
+
+            // Redirigir a la página protegida
+            return RedirectToAction("Dashboard", "Home");
         }
+
 
         // Mostrar mensaje de inicio exitoso
         public IActionResult InicioExitoso()
@@ -89,5 +92,14 @@ namespace Club.Controllers
         {
             return View();
         }
+        public IActionResult Logout()
+        {
+            // Eliminar los datos de sesión
+            HttpContext.Session.Clear();
+
+            // Redirigir al inicio
+            return RedirectToAction("Login");
+        }
+
     }
 }

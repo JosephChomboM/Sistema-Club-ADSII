@@ -10,7 +10,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Configura servicios de MVC
 builder.Services.AddControllersWithViews();
-
+// Habilitar sesiones
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Duración de la sesión
+    options.Cookie.HttpOnly = true; // Protección contra scripts maliciosos
+    options.Cookie.IsEssential = true; // Necesario para GDPR
+});
 var app = builder.Build();
 
 // Configurar middleware del pipeline
@@ -30,6 +36,9 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+// Middleware de sesiones
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
