@@ -1,32 +1,37 @@
-﻿using Club.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Club.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+        // Página principal
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        // Página de clubes
+        public IActionResult Clubes()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        // Página "About"
+        public IActionResult About()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
+        }
+
+        // Página de eventos
+        public IActionResult Events()
+        {
+            return View();
+        }
+
+        // Página de contacto
+        public IActionResult Contact()
+        {
+            return View();
         }
     }
 }
