@@ -1,0 +1,27 @@
+﻿@model IEnumerable<(TimeSpan Inicio, TimeSpan Fin)>
+
+<h2>Horarios Disponibles</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Horario</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var horario in Model)
+        {
+            <tr>
+                <td>@horario.Inicio - @horario.Fin</td>
+                <td>
+                    <a asp-action="Crear" asp-controller="Reservacion"
+                   asp-route-espacioId="@ViewData["EspacioId"]"
+                   asp-route-fechaInicio="@horario.Inicio"
+                   asp-route-fechaFin="@horario.Fin"
+                   asp-route-fecha="@ViewData["Fecha"]"
+                       class="btn btn-primary">Reservar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

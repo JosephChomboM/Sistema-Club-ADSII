@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Models/Reservacion.cs
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Club.Models
@@ -15,8 +16,13 @@ namespace Club.Models
         public int EspacioId { get; set; }
 
         [Required]
-        public DateTime FechaReservacion { get; set; }
+        public DateTime FechaInicio { get; set; } // Fecha y hora de inicio
+
+        [Required]
+        public DateTime FechaFin { get; set; } // Fecha y hora de fin
 
         public string Detalles { get; set; }
+
+        public Espacio Espacio { get; set; }
     }
 }

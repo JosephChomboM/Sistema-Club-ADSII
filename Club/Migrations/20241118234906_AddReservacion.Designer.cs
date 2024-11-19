@@ -4,6 +4,7 @@ using Club.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241118234906_AddReservacion")]
+    partial class AddReservacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +32,9 @@ namespace Club.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EspacioId"));
+
+                    b.Property<bool>("Disponible")
+                        .HasColumnType("bit");
 
                     b.Property<int>("LugarId")
                         .HasColumnType("int");
@@ -82,18 +88,13 @@ namespace Club.Migrations
                     b.Property<int>("EspacioId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaFin")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaInicio")
+                    b.Property<DateTime>("FechaReservacion")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("ReservacionId");
-
-                    b.HasIndex("EspacioId");
 
                     b.ToTable("Reservaciones");
                 });
@@ -138,17 +139,6 @@ namespace Club.Migrations
                         .IsRequired();
 
                     b.Navigation("Lugar");
-                });
-
-            modelBuilder.Entity("Club.Models.Reservacion", b =>
-                {
-                    b.HasOne("Club.Models.Espacio", "Espacio")
-                        .WithMany()
-                        .HasForeignKey("EspacioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Espacio");
                 });
 
             modelBuilder.Entity("Club.Models.Lugar", b =>

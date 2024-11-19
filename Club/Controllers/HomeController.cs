@@ -50,7 +50,7 @@ namespace Club.Controllers
                 {
                     l.Nombre,
                     l.Direccion,
-                    Espacios = l.Espacios.Select(e => new { e.Nombre, e.Disponible })
+                    Espacios = l.Espacios.Select(e => new { e.EspacioId, e.Nombre}) // Incluye EspacioId
                 })
                 .FirstOrDefault();
 
@@ -64,6 +64,7 @@ namespace Club.Controllers
 
             return View(lugar.Espacios);
         }
+
         // Página principal
         public IActionResult Index()
         {

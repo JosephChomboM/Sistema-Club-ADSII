@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Club.Models.Reservacion>
+
+@{
+    ViewData["Title"] = "Mis Reservas";
+}
+
+<h2>Mis Reservas</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Espacio</th>
+            <th>Lugar</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Detalles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reserva in Model)
+        {
+            <tr>
+                <td>@reserva.Espacio.Nombre</td>
+                <td>@reserva.Espacio.Lugar.Nombre</td>
+                <td>@reserva.FechaInicio.ToString("g")</td>
+                <td>@reserva.FechaFin.ToString("g")</td>
+                <td>@reserva.Detalles</td>
+            </tr>
+        }
+    </tbody>
+</table>

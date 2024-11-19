@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Registrar Reservación";
+}
+
+<h2>Registrar Reservación para @ViewData["EspacioNombre"]</h2>
+
+
+<form asp-action="Crear" asp-controller="Reservacion" method="post">
+    <input type="hidden" name="espacioId" value="@ViewData["EspacioId"]" />
+    <input type="hidden" name="fechaInicio" value="@ViewData["FechaInicio"]" />
+    <input type="hidden" name="fechaFin" value="@ViewData["FechaFin"]" />
+
+    <div class="form-group">
+        <label for="detalles">Detalles:</label>
+        <textarea id="detalles" name="detalles" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirmar Reservación</button>
+</form>
+

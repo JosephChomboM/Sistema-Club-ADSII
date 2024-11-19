@@ -7,29 +7,9 @@
 <h2>Espacios Disponibles en @ViewData["LugarNombre"]</h2>
 <p>@ViewData["LugarDireccion"]</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre del Espacio</th>
-            <th>Disponibilidad</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var espacio in Model)
-        {
-            <tr>
-                <td>@espacio.Nombre</td>
-                <td>
-                    @if (espacio.Disponible)
-                    {
-                        <span class="badge bg-success">Disponible</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">No Disponible</span>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@foreach (var espacio in Model)
+{
+    <h5>@espacio.Nombre</h5>
+    <a asp-action="ConsultarDisponibilidad" asp-controller="Reservacion" asp-route-espacioId="@espacio.EspacioId" class="btn btn-primary">Ver Disponibilidad</a>
+}
+

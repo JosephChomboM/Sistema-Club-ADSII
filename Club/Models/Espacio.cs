@@ -12,9 +12,6 @@ namespace Club.Models
         public string Nombre { get; set; }
 
         [Required]
-        public bool Disponible { get; set; }
-
-        [Required]
         public int LugarId { get; set; }
 
         public Lugar Lugar { get; set; }
