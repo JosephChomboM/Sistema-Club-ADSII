@@ -9,22 +9,22 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>#</th>
             <th>Espacio</th>
-            <th>Lugar</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
             <th>Detalles</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var reserva in Model)
+        @foreach (var reservacion in Model)
         {
             <tr>
-                <td>@reserva.Espacio.Nombre</td>
-                <td>@reserva.Espacio.Lugar.Nombre</td>
-                <td>@reserva.FechaInicio.ToString("g")</td>
-                <td>@reserva.FechaFin.ToString("g")</td>
-                <td>@reserva.Detalles</td>
+                <td>@reservacion.ReservacionId</td>
+                <td>@reservacion.Espacio.Nombre</td>
+                <td>@reservacion.FechaInicio.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@reservacion.FechaFin.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@reservacion.Detalles</td>
             </tr>
         }
     </tbody>

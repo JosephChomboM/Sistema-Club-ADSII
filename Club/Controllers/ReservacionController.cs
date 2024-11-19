@@ -147,25 +147,22 @@ namespace Club.Controllers
             return View();
         }
 
-        // Ver reservas
-
-        public IActionResult Index()
+        public IActionResult ConsultarReservas()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
             {
                 return RedirectToAction("Login", "Usuario");
             }
 
-            // Obtener todas las reservas del usuario logueado
             var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
-            var reservas = _context.Reservaciones
+            var reservaciones = _context.Reservaciones
                 .Where(r => r.UsuarioId == usuarioId)
-                .Include(r => r.Espacio) // Traer datos del espacio relacionado
-                .ThenInclude(e => e.Lugar) // Traer datos del lugar relacionado
+                .Include(r => r.Espacio)
                 .ToList();
 
-            return View(reservas);
+            return View(reservaciones);
         }
+
 
     }
 }

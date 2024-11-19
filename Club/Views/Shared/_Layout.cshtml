@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - The Club Smart</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
@@ -34,32 +33,33 @@
                     </li>
                     @if (Context.Session.GetString("UsuarioEmail") != null)
                     {
-                        <!-- Si el usuario está logueado -->
+                        <!-- Usuario logeado -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle"></i> @Context.Session.GetString("UsuarioEmail")
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
-                                <li><a class="dropdown-item text-danger" asp-controller="Usuario" asp-action="Logout">Cerrar Sesión</a></li>
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="CatalogoLugares"><i class="bi bi-search"></i> Consultar Disponibilidad</a></li>
+                                <li><a class="dropdown-item" asp-controller="Reservacion" asp-action="ConsultarReservas"><i class="bi bi-calendar"></i> Consultar Reservas</a></li>
+                                <li><a class="dropdown-item text-danger" asp-controller="Usuario" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
                             </ul>
                         </li>
                     }
                     else
                     {
-                        <!-- Si no está logueado -->
+                        <!-- Usuario no logeado -->
                         <li class="nav-item">
                             <a asp-controller="Usuario" asp-action="Login" class="nav-link">Login</a>
                         </li>
                     }
-
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Main content -->
-    <div class="container">
+    <div class="container mt-4">
         @RenderBody()
     </div>
 
