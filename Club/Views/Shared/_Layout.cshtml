@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - The Club Smart</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
     <!-- Navbar -->
@@ -26,14 +27,32 @@
                         <a asp-controller="Home" asp-action="About" class="nav-link">About</a>
                     </li>
                     <li class="nav-item">
-                        <a asp-controller="Usuario" asp-action="Login" class="nav-link">Login</a>
-                    </li>
-                    <li class="nav-item">
                         <a asp-controller="Home" asp-action="Events" class="nav-link">Events</a>
                     </li>
                     <li class="nav-item">
                         <a asp-controller="Home" asp-action="Contact" class="nav-link">Contact</a>
                     </li>
+                    @if (Context.Session.GetString("UsuarioEmail") != null)
+                    {
+                        <!-- Si el usuario está logueado -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> @Context.Session.GetString("UsuarioEmail")
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+                                <li><a class="dropdown-item text-danger" asp-controller="Usuario" asp-action="Logout">Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <!-- Si no está logueado -->
+                        <li class="nav-item">
+                            <a asp-controller="Usuario" asp-action="Login" class="nav-link">Login</a>
+                        </li>
+                    }
+
                 </ul>
             </div>
         </div>

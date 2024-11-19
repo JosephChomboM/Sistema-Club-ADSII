@@ -21,6 +21,7 @@ namespace Club.Controllers
             return View();
         }
 
+        
         [HttpPost]
         public IActionResult Login(string email, string contrasena)
         {
@@ -30,7 +31,6 @@ namespace Club.Controllers
                 return View();
             }
 
-            // Buscar el usuario en la base de datos por email
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
             if (usuario == null)
             {
@@ -38,7 +38,6 @@ namespace Club.Controllers
                 return View();
             }
 
-            // Validar la contraseña
             if (!BCrypt.Net.BCrypt.Verify(contrasena, usuario.Contrasena))
             {
                 ModelState.AddModelError(string.Empty, "La contraseña es incorrecta.");
@@ -46,12 +45,13 @@ namespace Club.Controllers
             }
 
             // Guardar datos del usuario en la sesión
-            HttpContext.Session.SetString("UsuarioId", usuario.UsuarioId.ToString());
+            HttpContext.Session.SetString("UsuarioEmail", usuario.Email);
             HttpContext.Session.SetString("UsuarioNombre", usuario.Nombre);
+            HttpContext.Session.SetString("UsuarioId", usuario.UsuarioId.ToString());
 
-            // Redirigir a la página protegida
             return RedirectToAction("Dashboard", "Home");
         }
+
 
 
         // Mostrar mensaje de inicio exitoso
@@ -94,12 +94,11 @@ namespace Club.Controllers
         }
         public IActionResult Logout()
         {
-            // Eliminar los datos de sesión
+            // Limpiar sesión
             HttpContext.Session.Clear();
-
-            // Redirigir al inicio
-            return RedirectToAction("Login");
+            return RedirectToAction("Login", "Usuario");
         }
+
 
     }
 }

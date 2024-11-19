@@ -17,6 +17,12 @@ namespace Club.Models
         [StringLength(255)]
         public string Direccion { get; set; }
 
+        [Required]
+        public string Descripcion { get; set; } // Breve descripción del club
+
+        [Required]
+        public string LogoUrl { get; set; } // URL de la imagen del logo del club
+
         public ICollection<Espacio> Espacios { get; set; }
     }
 }

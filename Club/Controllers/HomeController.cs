@@ -71,10 +71,22 @@ namespace Club.Controllers
             return View();
         }
 
-        // Página de clubes
+        // Lista de clubes
         public IActionResult Clubes()
         {
-            return View();
+            var clubes = _context.Lugares.ToList();
+            return View(clubes);
+        }
+
+        // Detalle de un club
+        public IActionResult DetalleClub(int id)
+        {
+            var club = _context.Lugares.FirstOrDefault(l => l.LugarId == id);
+            if (club == null)
+            {
+                return NotFound();
+            }
+            return View(club);
         }
 
         // Página "About"
