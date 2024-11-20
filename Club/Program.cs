@@ -1,5 +1,6 @@
 // Program.cs
 using Club.Data;
+using Club.Models;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 // Configura servicios de MVC
 builder.Services.AddControllersWithViews();

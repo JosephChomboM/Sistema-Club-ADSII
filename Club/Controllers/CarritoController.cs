@@ -25,6 +25,7 @@ namespace Club.Controllers
             return View(listaCarrito);
         }
 
+
         // Agregar un espacio al carrito
         public IActionResult Agregar(int espacioId, DateTime fechaInicio, DateTime fechaFin)
         {
