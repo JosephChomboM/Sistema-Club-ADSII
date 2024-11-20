@@ -1,27 +1,44 @@
-﻿@model IEnumerable<(TimeSpan Inicio, TimeSpan Fin)>
+﻿@model IEnumerable<(DateTime Inicio, DateTime Fin)>
 
-<h2>Horarios Disponibles</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Horario</th>
-            <th>Acción</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var horario in Model)
-        {
+@{
+    ViewData["Title"] = "Consultar Disponibilidad";
+}
+
+<h2>Consultar Disponibilidad para @ViewData["EspacioNombre"]</h2>
+
+<form asp-action="ConsultarDisponibilidad" asp-controller="Reservacion" method="get">
+    <input type="hidden" name="espacioId" value="@ViewData["EspacioId"]" />
+    <div class="form-group">
+        <label for="fecha">Selecciona una fecha:</label>
+        <input type="date" id="fecha" name="fecha" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Consultar Horarios</button>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <h3>Horarios Disponibles para @ViewData["Fecha"]</h3>
+    <table class="table">
+        <thead>
             <tr>
-                <td>@horario.Inicio - @horario.Fin</td>
-                <td>
-                    <a asp-action="Crear" asp-controller="Reservacion"
+                <th>Horario</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var horario in Model)
+            {
+                <tr>
+                    <td>@horario.Inicio - @horario.Fin</td>
+                    <td>
+                        <a asp-action="Crear" asp-controller="Reservacion"
                    asp-route-espacioId="@ViewData["EspacioId"]"
                    asp-route-fechaInicio="@horario.Inicio"
                    asp-route-fechaFin="@horario.Fin"
-                   asp-route-fecha="@ViewData["Fecha"]"
-                       class="btn btn-primary">Reservar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                           class="btn btn-success">Reservar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

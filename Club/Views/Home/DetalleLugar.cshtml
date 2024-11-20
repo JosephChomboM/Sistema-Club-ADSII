@@ -10,6 +10,6 @@
 @foreach (var espacio in Model)
 {
     <h5>@espacio.Nombre</h5>
-    <a asp-action="ConsultarDisponibilidad" asp-controller="Reservacion" asp-route-espacioId="@espacio.EspacioId" class="btn btn-primary">Ver Disponibilidad</a>
+    <a asp-action="ConsultarDisponibilidad" asp-controller="Reservacion"
+   asp-route-espacioId="@espacio.EspacioId" class="btn btn-primary">Ver Disponibilidad</a>
 }
-

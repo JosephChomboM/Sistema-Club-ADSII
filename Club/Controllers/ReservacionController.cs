@@ -17,12 +17,8 @@ namespace Club.Controllers
             _context = context;
         }
 
-        // Consultar disponibilidad de horarios
-        public IActionResult ConsultarDisponibilidad(int espacioId, DateTime fecha)
+        public IActionResult ConsultarDisponibilidad(int espacioId, DateTime? fecha)
         {
-            Console.WriteLine($"EspacioId recibido: {espacioId}");
-            Console.WriteLine($"Fecha recibida: {fecha}");
-
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
             {
                 return RedirectToAction("Login", "Usuario");
@@ -31,53 +27,61 @@ namespace Club.Controllers
             var espacio = _context.Espacios.FirstOrDefault(e => e.EspacioId == espacioId);
             if (espacio == null)
             {
-                Console.WriteLine("Error: El espacio no existe.");
                 return NotFound("El espacio no existe.");
             }
 
-            // Horarios reservados en la fecha específica
+            if (!fecha.HasValue)
+            {
+                ViewData["EspacioId"] = espacioId;
+                ViewData["EspacioNombre"] = espacio.Nombre;
+                return View(null); // Retorna solo el formulario
+            }
+
+            // Consultar reservaciones en la fecha seleccionada
             var reservaciones = _context.Reservaciones
-                .Where(r => r.EspacioId == espacioId && r.FechaInicio.Date == fecha.Date)
+                .Where(r => r.EspacioId == espacioId && r.FechaInicio.Date == fecha.Value.Date)
                 .Select(r => new
                 {
-                    HoraInicio = r.FechaInicio.TimeOfDay, // Asigna nombres únicos
-                    HoraFin = r.FechaFin.TimeOfDay        // Asigna nombres únicos
+                    HoraInicio = r.FechaInicio.TimeOfDay,
+                    HoraFin = r.FechaFin.TimeOfDay
                 })
                 .ToList();
 
-            // Generar horarios disponibles (8 AM a 8 PM)
             var inicioDia = new TimeSpan(8, 0, 0);
             var finDia = new TimeSpan(20, 0, 0);
             var intervalo = new TimeSpan(1, 0, 0);
 
-            var horasDisponibles = new List<(TimeSpan Inicio, TimeSpan Fin)>();
+            var horasDisponibles = new List<(DateTime Inicio, DateTime Fin)>();
 
             for (var hora = inicioDia; hora < finDia; hora += intervalo)
             {
                 var siguienteHora = hora + intervalo;
 
-                // Verificar si el horario está ocupado
+                // Verificar disponibilidad
                 var ocupado = reservaciones.Any(r =>
-                    (hora >= r.HoraInicio && hora < r.HoraFin) || // Inicio en horario reservado
-                    (siguienteHora > r.HoraInicio && siguienteHora <= r.HoraFin) || // Fin en horario reservado
-                    (hora <= r.HoraInicio && siguienteHora >= r.HoraFin)); // Contiene el horario reservado
+                    (hora >= r.HoraInicio && hora < r.HoraFin) ||
+                    (siguienteHora > r.HoraInicio && siguienteHora <= r.HoraFin) ||
+                    (hora <= r.HoraInicio && siguienteHora >= r.HoraFin));
 
                 if (!ocupado)
                 {
-                    horasDisponibles.Add((hora, siguienteHora));
+                    horasDisponibles.Add((fecha.Value.Date + hora, fecha.Value.Date + siguienteHora));
                 }
             }
 
-            ViewData["EspacioNombre"] = espacio.Nombre;
             ViewData["EspacioId"] = espacioId;
-            ViewData["Fecha"] = fecha.ToString("yyyy-MM-dd");
+            ViewData["EspacioNombre"] = espacio.Nombre;
+            ViewData["Fecha"] = fecha.Value.ToString("yyyy-MM-dd");
+
             return View(horasDisponibles);
         }
 
 
+
+
         // Mostrar formulario de creación
         [HttpGet]
-        public IActionResult Crear(int espacioId, TimeSpan fechaInicio, TimeSpan fechaFin, DateTime fecha)
+        public IActionResult Crear(int espacioId, DateTime fechaInicio, DateTime fechaFin)
         {
             var espacio = _context.Espacios.FirstOrDefault(e => e.EspacioId == espacioId);
             if (espacio == null)
@@ -87,33 +91,21 @@ namespace Club.Controllers
 
             ViewData["EspacioNombre"] = espacio.Nombre;
             ViewData["EspacioId"] = espacioId;
-            ViewData["FechaInicio"] = fecha.Date + fechaInicio; // Combina fecha y hora
-            ViewData["FechaFin"] = fecha.Date + fechaFin;
+            ViewData["FechaInicio"] = fechaInicio;
+            ViewData["FechaFin"] = fechaFin;
 
             return View();
         }
+
 
 
         // Procesar la reservación
         [HttpPost]
         public IActionResult Crear(int espacioId, DateTime fechaInicio, DateTime fechaFin, string detalles)
         {
-            // Agregar mensajes de depuración
-            Console.WriteLine($"EspacioId recibido: {espacioId}");
-            Console.WriteLine($"FechaInicio: {fechaInicio}, FechaFin: {fechaFin}");
-            Console.WriteLine($"Detalles: {detalles}");
-
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
             {
                 return RedirectToAction("Login", "Usuario");
-            }
-
-            // Verificar si el EspacioId existe en la base de datos
-            var espacio = _context.Espacios.FirstOrDefault(e => e.EspacioId == espacioId);
-            if (espacio == null)
-            {
-                ModelState.AddModelError("", "El espacio seleccionado no existe.");
-                return View();
             }
 
             if (fechaInicio >= fechaFin)
@@ -138,6 +130,7 @@ namespace Club.Controllers
 
             return RedirectToAction("Confirmacion");
         }
+
 
 
 

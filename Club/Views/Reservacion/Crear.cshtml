@@ -3,18 +3,13 @@
 }
 
 <h2>Registrar Reservación para @ViewData["EspacioNombre"]</h2>
+<p>Desde: <strong>@((DateTime)ViewData["FechaInicio"])</strong></p>
+<p>Hasta: <strong>@((DateTime)ViewData["FechaFin"])</strong></p>
 
-
-<form asp-action="Crear" asp-controller="Reservacion" method="post">
+<form asp-action="Agregar" asp-controller="Carrito" method="post">
     <input type="hidden" name="espacioId" value="@ViewData["EspacioId"]" />
     <input type="hidden" name="fechaInicio" value="@ViewData["FechaInicio"]" />
     <input type="hidden" name="fechaFin" value="@ViewData["FechaFin"]" />
 
-    <div class="form-group">
-        <label for="detalles">Detalles:</label>
-        <textarea id="detalles" name="detalles" class="form-control"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Confirmar Reservación</button>
+    <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
 </form>
-

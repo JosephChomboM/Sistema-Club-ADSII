@@ -1,0 +1,46 @@
+﻿@model List<dynamic>
+
+@{
+    ViewData["Title"] = "Carrito de Compras";
+}
+
+<h2>Carrito de Compras</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Espacio</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Precio</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.NombreEspacio</td>
+                    <td>@((DateTime)item.FechaInicio)</td>
+                    <td>@((DateTime)item.FechaFin)</td>
+                    <td>@item.Precio.ToString("C")</td>
+                    <td>
+                        <form asp-action="Eliminar" asp-controller="Carrito" method="post">
+                            <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                            <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                            <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Pagar" asp-controller="Carrito" class="btn btn-success">Proceder al Pago</a>
+}
+else
+{
+    <p>No tienes reservas en el carrito.</p>
+}

@@ -1,8 +1,6 @@
 ﻿@{
-    ViewData["Title"] = "Confirmación de Reservación";
+    ViewData["Title"] = "Reservación Confirmada";
 }
 
-<h2>Reservación Confirmada</h2>
-<p>Tu reservación ha sido registrada exitosamente.</p>
-<a asp-action="Dashboard" asp-controller="Home" class="btn btn-primary">Volver al Dashboard</a>
-
+<h2>¡Reservación Confirmada!</h2>
+<p>Tu reservación para el espacio @ViewData["EspacioNombre"] ha sido registrada con éxito.</p>

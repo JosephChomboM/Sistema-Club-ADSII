@@ -13,7 +13,9 @@ namespace Club.Models
 
         [Required]
         public int LugarId { get; set; }
-
+        [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "El precio debe ser un valor positivo.")]
+        public double Precio { get; set; }
         public Lugar Lugar { get; set; }
     }
 }
