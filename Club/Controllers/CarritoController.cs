@@ -71,37 +71,24 @@ namespace Club.Controllers
             HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
             return RedirectToAction("Index");
         }
-
-        // Proceder al pago
-        public IActionResult Pagar()
+        // Mostrar el resumen antes de proceder al pago
+        public IActionResult Resumen()
         {
             var carrito = HttpContext.Session.GetString("Carrito");
-            if (string.IsNullOrEmpty(carrito))
+            var listaCarrito = string.IsNullOrEmpty(carrito)
+                ? new List<dynamic>()
+                : JsonConvert.DeserializeObject<List<dynamic>>(carrito);
+
+            if (!listaCarrito.Any())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index"); // Si el carrito está vacío, redirigir al índice
             }
 
-            var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
-            var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+            // Calcular el total
+            ViewData["Total"] = listaCarrito.Sum(item => (double)item.Precio);
 
-            foreach (var item in listaCarrito)
-            {
-                var reservacion = new Reservacion
-                {
-                    UsuarioId = usuarioId,
-                    EspacioId = item.EspacioId,
-                    FechaInicio = item.FechaInicio,
-                    FechaFin = item.FechaFin,
-                    Detalles = $"Reserva para el espacio {item.NombreEspacio}."
-                };
-
-                _context.Reservaciones.Add(reservacion);
-            }
-
-            _context.SaveChanges();
-            HttpContext.Session.Remove("Carrito");
-
-            return RedirectToAction("Confirmacion", "Reservacion");
+            return View(listaCarrito);
         }
+
     }
 }

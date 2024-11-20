@@ -1,0 +1,36 @@
+﻿@model List<dynamic>
+
+@{
+    ViewData["Title"] = "Resumen de Compra";
+}
+
+<h2>Resumen de Compra</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Espacio</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NombreEspacio</td>
+                <td>@((DateTime)item.FechaInicio)</td>
+                <td>@((DateTime)item.FechaFin)</td>
+                <td>@item.Precio.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Total: S/. @((double)ViewData["Total"])</h4>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Volver al Carrito</a>
+    <button class="btn btn-primary" disabled>Continuar al Pago (Pendiente de integración)</button>
+</div>

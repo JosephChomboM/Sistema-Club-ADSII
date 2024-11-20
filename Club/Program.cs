@@ -1,6 +1,7 @@
 // Program.cs
 using Club.Data;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 // Configura servicios de MVC
 builder.Services.AddControllersWithViews();
 // Habilitar sesiones
