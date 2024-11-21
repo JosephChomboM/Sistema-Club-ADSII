@@ -1,65 +1,69 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
+using Newtonsoft.Json;
 
 namespace Club.Controllers
 {
     public class PagoController : Controller
     {
-        public IActionResult Checkout()
+        [HttpPost]
+        [Route("create-checkout-session")]
+        public IActionResult CreateCheckoutSession()
         {
-            // Leer el carrito de la sesión
-            var carrito = HttpContext.Session.GetString("Carrito");
-            if (string.IsNullOrEmpty(carrito))
+            // Recuperar el carrito de la sesión
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            if (string.IsNullOrEmpty(carritoJson))
             {
-                return RedirectToAction("Index", "Carrito"); // Redirige si el carrito está vacío
+                return BadRequest("El carrito está vacío.");
             }
 
-            var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
+            var carrito = JsonConvert.DeserializeObject<List<dynamic>>(carritoJson);
 
-            if (listaCarrito == null || !listaCarrito.Any())
+            // Calcular el total
+            long totalCentavos = 0;
+            var nombresProductos = new List<string>();
+
+            foreach (var item in carrito)
             {
-                return RedirectToAction("Index", "Carrito"); // Redirige si no hay elementos
+                totalCentavos += (long)(item.Precio * 100); // Convertir a centavos
+                nombresProductos.Add((string)item.NombreEspacio); // Agregar el nombre del espacio
             }
 
-            var lineItems = new List<SessionLineItemOptions>();
+            var nombreProducto = nombresProductos.Count > 1
+                ? $"{nombresProductos[0]} + {nombresProductos.Count - 1} más"
+                : nombresProductos[0];
 
-            // Crear elementos del carrito para Stripe
-            foreach (var item in listaCarrito)
-            {
-                lineItems.Add(new SessionLineItemOptions
-                {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        UnitAmount = (long)(item.Precio * 100), // Stripe usa centavos
-                        Currency = "usd",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = item.NombreEspacio
-                        }
-                    },
-                    Quantity = 1
-                });
-            }
-
-            // Crear sesión de Stripe
+            // Crear la sesión de Stripe
             var options = new SessionCreateOptions
             {
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = lineItems,
+                UiMode = "embedded",
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmount = totalCentavos, // Total dinámico
+                            Currency = "pen",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = nombreProducto // Nombre dinámico
+                            }
+                        },
+                        Quantity = 1
+                    }
+                },
                 Mode = "payment",
-                SuccessUrl = Url.Action("Success", "Pago", null, Request.Scheme),
-                CancelUrl = Url.Action("Cancel", "Pago", null, Request.Scheme),
+                RedirectOnCompletion = "never"
             };
 
             var service = new SessionService();
-            Session session = service.Create(options);
+            var session = service.Create(options);
 
-            // Redirigir a la página de Stripe
-            return Redirect(session.Url);
+            // Devolver el client_secret al cliente para usar con Stripe.js
+            return Json(new { clientSecret = session.ClientSecret });
         }
-
 
         public IActionResult Success()
         {

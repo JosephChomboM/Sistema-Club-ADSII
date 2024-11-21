@@ -25,7 +25,7 @@
                     <td>@item.NombreEspacio</td>
                     <td>@((DateTime)item.FechaInicio)</td>
                     <td>@((DateTime)item.FechaFin)</td>
-                    <td>@item.Precio.ToString("C")</td>
+                    <td>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</td>
                     <td>
                         <form asp-action="Eliminar" asp-controller="Carrito" method="post">
                             <input type="hidden" name="espacioId" value="@item.EspacioId" />
