@@ -1,6 +1,7 @@
 ﻿using Club.Data;
 using Club.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Club.Controllers
@@ -72,24 +73,70 @@ namespace Club.Controllers
             HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
             return RedirectToAction("Index");
         }
-        // Mostrar el resumen antes de proceder al pago
         public IActionResult Resumen()
         {
+            // Obtener el carrito de la sesión
             var carrito = HttpContext.Session.GetString("Carrito");
-            var listaCarrito = string.IsNullOrEmpty(carrito)
-                ? new List<dynamic>()
-                : JsonConvert.DeserializeObject<List<dynamic>>(carrito);
-
-            if (!listaCarrito.Any())
+            if (string.IsNullOrEmpty(carrito))
             {
-                return RedirectToAction("Index"); // Si el carrito está vacío, redirigir al índice
+                return View(new List<dynamic>());
+            }
+
+            // Obtener el usuario logueado
+            var usuarioId = HttpContext.Session.GetString("UsuarioId");
+            if (string.IsNullOrEmpty(usuarioId))
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == int.Parse(usuarioId));
+            if (usuario == null)
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+
+            // Deserializar el carrito
+            var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
+
+            // Crear lista de datos para pasar a la vista
+            var resumenConClubes = new List<dynamic>();
+
+            foreach (var item in listaCarrito)
+            {
+                int espacioId = (int)item.EspacioId;
+
+                // Obtener el espacio y el club asociado
+                var espacio = _context.Espacios.Include(e => e.Lugar)
+                                .FirstOrDefault(e => e.EspacioId == espacioId);
+
+                if (espacio != null)
+                {
+                    resumenConClubes.Add(new
+                    {
+                        NombreEspacio = espacio.Nombre,
+                        FechaInicio = item.FechaInicio,
+                        FechaFin = item.FechaFin,
+                        Precio = item.Precio,
+                        NombreClub = espacio.Lugar.Nombre,
+                        DireccionClub = espacio.Lugar.Direccion,
+                        UsuarioEmail = usuario.Email,
+                        UsuarioNombre = usuario.Nombre,
+                        UsuarioApellido = usuario.Apellido,
+                        UsuarioDNI = usuario.DNI,
+                        UsuarioTelefono = usuario.Telefono,
+                        UsuarioDireccion = usuario.Direccion
+                    });
+                }
             }
 
             // Calcular el total
-            ViewData["Total"] = listaCarrito.Sum(item => (double)item.Precio);
+            ViewData["Total"] = resumenConClubes.Sum(r => (double)r.Precio);
 
-            return View(listaCarrito);
+            return View(resumenConClubes);
         }
+
+
+
 
     }
 }

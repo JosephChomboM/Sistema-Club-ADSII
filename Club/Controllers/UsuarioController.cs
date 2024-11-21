@@ -88,6 +88,7 @@ namespace Club.Controllers
             return RedirectToAction("RegistroExitoso");
         }
 
+
         public IActionResult RegistroExitoso()
         {
             return View();

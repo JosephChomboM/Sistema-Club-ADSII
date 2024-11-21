@@ -8,19 +8,37 @@
 
 <form asp-action="Registrar" method="post">
     <div class="form-group">
-        <label asp-for="Nombre"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+        <label for="Nombre">Nombre</label>
+        <input type="text" id="Nombre" name="Nombre" class="form-control" required />
     </div>
     <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <label for="Apellido">Apellido</label>
+        <input type="text" id="Apellido" name="Apellido" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="Contrasena"></label>
-        <input asp-for="Contrasena" class="form-control" type="password" />
-        <span asp-validation-for="Contrasena" class="text-danger"></span>
+        <label for="Email">Email</label>
+        <input type="email" id="Email" name="Email" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Contrasena">Contraseña</label>
+        <input type="password" id="Contrasena" name="Contrasena" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="DNI">DNI</label>
+        <input type="text" id="DNI" name="DNI" class="form-control" maxlength="8" />
+    </div>
+    <div class="form-group">
+        <label for="Telefono">Teléfono</label>
+        <input type="text" id="Telefono" name="Telefono" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Direccion">Dirección</label>
+        <input type="text" id="Direccion" name="Direccion" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="FechaNacimiento">Fecha de Nacimiento</label>
+        <input type="date" id="FechaNacimiento" name="FechaNacimiento" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Registrar</button>
 </form>
+

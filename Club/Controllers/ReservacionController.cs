@@ -131,15 +131,6 @@ namespace Club.Controllers
             return RedirectToAction("Confirmacion");
         }
 
-
-
-
-        // Confirmación
-        public IActionResult Confirmacion()
-        {
-            return View();
-        }
-
         public IActionResult ConsultarReservas()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))

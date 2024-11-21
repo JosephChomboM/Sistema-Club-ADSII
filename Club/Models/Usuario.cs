@@ -13,6 +13,15 @@ namespace Club.Models
         [StringLength(100)]
         public string Nombre { get; set; }
 
+        [StringLength(100)]
+        public string Apellido { get; set; }
+
+        [StringLength(8, MinimumLength = 8)]
+        public string DNI { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? FechaNacimiento { get; set; }
+
         [Required]
         [EmailAddress]
         [StringLength(100)]
@@ -21,6 +30,13 @@ namespace Club.Models
         [Required]
         [StringLength(255)]
         public string Contrasena { get; set; }
+
+        [StringLength(15)]
+        [Phone]
+        public string Telefono { get; set; }
+
+        [StringLength(200)]
+        public string Direccion { get; set; }
 
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
     }

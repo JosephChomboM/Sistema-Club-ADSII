@@ -5,38 +5,95 @@
     var total = (double)ViewData["Total"];
 }
 
-<h2>Resumen de Compra</h2>
+<div class="container mt-4">
+    <!-- Título -->
+    <h2 class="mb-4">Revisar y Confirmar Compra</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Espacio</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
-            <th>Precio</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.NombreEspacio</td>
-                <td>@((DateTime)item.FechaInicio)</td>
-                <td>@((DateTime)item.FechaFin)</td>
-                <td>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="row">
+        <!-- Columna Izquierda -->
+        <div class="col-md-8">
+            <!-- Información de Contacto -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Información de Contacto</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> @Model.First().UsuarioEmail</p>
+                    <p><strong>Nombre:</strong> @Model.First().UsuarioNombre @Model.First().UsuarioApellido</p>
+                    <p><strong>DNI:</strong> @Model.First().UsuarioDNI</p>
+                    <p><strong>Teléfono:</strong> @Model.First().UsuarioTelefono</p>
+                    <p><strong>Dirección:</strong> @Model.First().UsuarioDireccion</p>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="@Url.Action("EditarContacto", "Usuario")" class="btn btn-link">Editar</a>
+                </div>
+            </div>
 
-<h4>Total: @total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</h4>
+            <!-- Información de los Clubes -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Información de los Clubes</h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model)
+                    {
+                        <div class="mb-3">
+                            <p><strong>Club:</strong> @item.NombreClub</p>
+                            <p><strong>Dirección:</strong> @item.DireccionClub</p>
+                            <hr>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
 
-<!-- Botón que abre el modal -->
-<button id="btnPagar" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#stripeModal">
-    Pagar
-</button>
+        <!-- Columna Derecha -->
+        <div class="col-md-4">
+            <!-- Resumen de Compra -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Resumen de Compra</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var item in Model)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@item.NombreEspacio</strong>
+                                    <p class="mb-0">Desde: @((DateTime)item.FechaInicio) <br> Hasta: @((DateTime)item.FechaFin)</p>
+                                </div>
+                                <span>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <p class="d-flex justify-content-between fw-bold">
+                        <span>Total Pedido:</span>
+                        <span>@total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</span>
+                    </p>
+                </div>
+            </div>
 
-<!-- Modal de Bootstrap -->
+            <!-- Cupones y Pagar -->
+            <div class="card">
+                <div class="card-body">
+                    <h6>¿Tienes un cupón de descuento?</h6>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="CUPÓN">
+                        <button class="btn btn-dark">Aplicar</button>
+                    </div>
+                    <button id="btnPagar" class="btn btn-primary btn-lg w-100 mt-3" data-bs-toggle="modal" data-bs-target="#stripeModal">
+                        Pagar @total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Bootstrap para Stripe -->
 <div class="modal fade" id="stripeModal" tabindex="-1" aria-labelledby="stripeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
