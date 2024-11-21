@@ -29,7 +29,7 @@
             @foreach (var horario in Model)
             {
                 <tr>
-                    <td>@horario.Inicio - @horario.Fin</td>
+                    <td>@horario.Inicio.ToString("yyyy-MM-dd HH:mm") - @horario.Fin.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>
                         <a asp-action="Crear" asp-controller="Reservacion"
                    asp-route-espacioId="@ViewData["EspacioId"]"

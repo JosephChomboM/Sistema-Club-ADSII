@@ -34,25 +34,58 @@ namespace Club.Controllers
                 return NotFound("El espacio no existe.");
             }
 
-            var itemCarrito = new
-            {
-                EspacioId = espacio.EspacioId,
-                NombreEspacio = espacio.Nombre,
-                Precio = espacio.Precio,
-                FechaInicio = fechaInicio,
-                FechaFin = fechaFin
-            };
-
             var carrito = HttpContext.Session.GetString("Carrito");
             var listaCarrito = string.IsNullOrEmpty(carrito)
-                ? new List<object>()
-                : JsonConvert.DeserializeObject<List<object>>(carrito);
+                ? new List<dynamic>()
+                : JsonConvert.DeserializeObject<List<dynamic>>(carrito);
 
-            listaCarrito.Add(itemCarrito);
+            // Verificar si ya existe una reserva para este espacio
+            var itemExistente = listaCarrito.FirstOrDefault(item =>
+                item.EspacioId == espacioId &&
+                (
+                    (DateTime)item.FechaFin == fechaInicio || // Nueva hora inicia justo después
+                    (DateTime)item.FechaInicio == fechaFin    // Nueva hora termina justo antes
+                )
+            );
+
+            if (itemExistente != null)
+            {
+                // Unificar la reserva existente con la nueva
+                if ((DateTime)itemExistente.FechaFin == fechaInicio)
+                {
+                    itemExistente.FechaFin = fechaFin; // Extiende el fin de la reserva
+                }
+                else if ((DateTime)itemExistente.FechaInicio == fechaFin)
+                {
+                    itemExistente.FechaInicio = fechaInicio; // Extiende el inicio de la reserva
+                }
+
+                // Actualiza el precio
+                itemExistente.Precio += espacio.Precio;
+            }
+            else
+            {
+                // Si no existe, agregar como una nueva entrada
+                var itemCarrito = new
+                {
+                    EspacioId = espacio.EspacioId,
+                    NombreEspacio = espacio.Nombre,
+                    Precio = espacio.Precio,
+                    FechaInicio = fechaInicio,
+                    FechaFin = fechaFin
+                };
+                listaCarrito.Add(itemCarrito);
+            }
+
+            // Guardar el carrito actualizado en la sesión
             HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
 
             return RedirectToAction("Index");
         }
+
+
+
+
 
         // Eliminar un elemento del carrito
         [HttpPost]
@@ -126,5 +159,60 @@ namespace Club.Controllers
 
             return View(resumenConClubes);
         }
+        // Aumentar una hora al espacio en el carrito
+        [HttpPost]
+        public IActionResult Aumentar(int espacioId, DateTime fechaInicio, DateTime fechaFin)
+        {
+            var carrito = HttpContext.Session.GetString("Carrito");
+            var listaCarrito = string.IsNullOrEmpty(carrito)
+                ? new List<dynamic>()
+                : JsonConvert.DeserializeObject<List<dynamic>>(carrito);
+
+            foreach (var item in listaCarrito)
+            {
+                if ((int)item.EspacioId == espacioId &&
+                    (DateTime)item.FechaInicio == fechaInicio &&
+                    (DateTime)item.FechaFin == fechaFin)
+                {
+                    // Aumentar una hora al tiempo de reserva
+                    item.FechaFin = ((DateTime)item.FechaFin).AddHours(1);
+                    item.Precio += _context.Espacios.First(e => e.EspacioId == espacioId).Precio; // Actualizar el precio
+                    break;
+                }
+            }
+
+            HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
+            return RedirectToAction("Index");
+        }
+
+        // Disminuir una hora al espacio en el carrito
+        [HttpPost]
+        public IActionResult Disminuir(int espacioId, DateTime fechaInicio, DateTime fechaFin)
+        {
+            var carrito = HttpContext.Session.GetString("Carrito");
+            var listaCarrito = string.IsNullOrEmpty(carrito)
+                ? new List<dynamic>()
+                : JsonConvert.DeserializeObject<List<dynamic>>(carrito);
+
+            foreach (var item in listaCarrito)
+            {
+                if ((int)item.EspacioId == espacioId &&
+                    (DateTime)item.FechaInicio == fechaInicio &&
+                    (DateTime)item.FechaFin == fechaFin)
+                {
+                    // Evitar que el tiempo de reserva sea menor a una hora
+                    if (((DateTime)item.FechaFin).Subtract(((DateTime)item.FechaInicio)).TotalHours > 1)
+                    {
+                        item.FechaFin = ((DateTime)item.FechaFin).AddHours(-1);
+                        item.Precio -= _context.Espacios.First(e => e.EspacioId == espacioId).Precio; // Actualizar el precio
+                    }
+                    break;
+                }
+            }
+
+            HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -23,23 +23,53 @@
             {
                 <tr>
                     <td>@item.NombreEspacio</td>
-                    <td>@((DateTime)item.FechaInicio)</td>
-                    <td>@((DateTime)item.FechaFin)</td>
+                    <td>@item.FechaInicio.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@item.FechaFin.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</td>
                     <td>
-                        <form asp-action="Eliminar" asp-controller="Carrito" method="post">
-                            <input type="hidden" name="espacioId" value="@item.EspacioId" />
-                            <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
-                            <input type="hidden" name="fechaFin" value="@item.FechaFin" />
-                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                        </form>
+                        <div class="d-flex align-items-center">
+                            <!-- Botón de disminuir -->
+                            <form asp-action="Disminuir" asp-controller="Carrito" method="post" style="display:inline;">
+                                <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                                <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                                <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                                <button class="btn btn-outline-danger btn-sm me-2">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                            </form>
+
+                            <!-- Número de horas -->
+                            <div class="border px-2 py-1 text-center" style="width: 50px;">
+                                @(((DateTime)item.FechaFin).Subtract((DateTime)item.FechaInicio).TotalHours)
+                            </div>
+
+                            <!-- Botón de aumentar -->
+                            <form asp-action="Aumentar" asp-controller="Carrito" method="post" style="display:inline;">
+                                <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                                <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                                <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                                <button class="btn btn-outline-success btn-sm ms-2">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </form>
+
+                            <!-- Botón de eliminar -->
+                            <form asp-action="Eliminar" asp-controller="Carrito" method="post" style="display:inline; margin-left: 10px;">
+                                <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                                <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                                <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                                <button class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
+
                 </tr>
             }
         </tbody>
     </table>
     <a asp-action="Resumen" asp-controller="Carrito" class="btn btn-success">Continuar Pago</a>
-
 }
 else
 {

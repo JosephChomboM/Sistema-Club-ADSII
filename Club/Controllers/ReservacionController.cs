@@ -75,10 +75,6 @@ namespace Club.Controllers
 
             return View(horasDisponibles);
         }
-
-
-
-
         // Mostrar formulario de creación
         [HttpGet]
         public IActionResult Crear(int espacioId, DateTime fechaInicio, DateTime fechaFin)
@@ -89,67 +85,24 @@ namespace Club.Controllers
                 return NotFound("El espacio no existe.");
             }
 
-            ViewData["EspacioNombre"] = espacio.Nombre;
-            ViewData["EspacioId"] = espacioId;
-            ViewData["FechaInicio"] = fechaInicio;
-            ViewData["FechaFin"] = fechaFin;
+            var model = new CrearReservacionViewModel
+            {
+                EspacioId = espacioId,
+                EspacioNombre = espacio.Nombre,
+                FechaInicio = fechaInicio,
+                FechaFin = fechaFin
+            };
 
-            return View();
+            return View(model);
         }
-
-
 
         // Procesar la reservación
         [HttpPost]
         public IActionResult Crear(int espacioId, DateTime fechaInicio, DateTime fechaFin, string detalles)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-
-            if (fechaInicio >= fechaFin)
-            {
-                ModelState.AddModelError("", "La fecha de inicio debe ser anterior a la fecha de fin.");
-                return View();
-            }
-
-            var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
-
-            var reservacion = new Reservacion
-            {
-                UsuarioId = usuarioId,
-                EspacioId = espacioId,
-                FechaInicio = fechaInicio,
-                FechaFin = fechaFin,
-                Detalles = detalles
-            };
-
-            _context.Reservaciones.Add(reservacion);
-            _context.SaveChanges();
-
-            return RedirectToAction("Confirmacion");
+            // Reutiliza la lógica del CarritoController para manejar la adición
+            return RedirectToAction("Agregar", "Carrito", new { espacioId, fechaInicio, fechaFin });
         }
-
-        public IActionResult ConsultarReservas()
-        {
-            // Verificar si el usuario está logueado
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-
-            var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
-
-            // Obtener las reservas del usuario
-            var reservaciones = _context.Reservaciones
-                .Where(r => r.UsuarioId == usuarioId)
-                .Include(r => r.Espacio)
-                .ToList();
-
-            return View(reservaciones);
-        }
-
 
     }
 }

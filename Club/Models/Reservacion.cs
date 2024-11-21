@@ -16,9 +16,11 @@ namespace Club.Models
         public int EspacioId { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
         public DateTime FechaInicio { get; set; } // Fecha y hora de inicio
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
         public DateTime FechaFin { get; set; } // Fecha y hora de fin
 
         public string Detalles { get; set; }
