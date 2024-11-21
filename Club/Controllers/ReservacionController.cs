@@ -133,12 +133,15 @@ namespace Club.Controllers
 
         public IActionResult ConsultarReservas()
         {
+            // Verificar si el usuario está logueado
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
             {
                 return RedirectToAction("Login", "Usuario");
             }
 
             var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+            // Obtener las reservas del usuario
             var reservaciones = _context.Reservaciones
                 .Where(r => r.UsuarioId == usuarioId)
                 .Include(r => r.Espacio)

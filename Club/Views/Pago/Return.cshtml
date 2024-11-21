@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Resultado del Pago";
+}
+
+<h2>Procesando el resultado de tu pago...</h2>
+
+<script>
+    // Extraer el session_id de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+
+    if (!sessionId) {
+        alert("No se encontró un identificador de sesión.");
+        window.location.href = "/Carrito/Resumen";
+    }
+
+    // Verificar el estado de la sesión
+    async function checkPaymentStatus() {
+        try {
+            const response = await fetch(`/session-status?session_id=${sessionId}`);
+            const session = await response.json();
+
+            if (session.status === "complete" && session.payment_status === "paid") {
+                // Redirigir automáticamente a ConsultarReservas
+                window.location.href = "/Reservacion/ConsultarReservas";
+            } else {
+                alert("Hubo un problema con el pago. Intenta nuevamente.");
+                window.location.href = "/Carrito/Resumen";
+            }
+        } catch (error) {
+            console.error("Error al verificar el estado de pago:", error);
+            alert("Ocurrió un error inesperado.");
+            window.location.href = "/Carrito/Resumen";
+        }
+    }
+
+    checkPaymentStatus();
+</script>
+

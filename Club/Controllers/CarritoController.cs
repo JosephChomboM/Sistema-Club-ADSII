@@ -1,5 +1,4 @@
 ﻿using Club.Data;
-using Club.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -25,7 +24,6 @@ namespace Club.Controllers
 
             return View(listaCarrito);
         }
-
 
         // Agregar un espacio al carrito
         public IActionResult Agregar(int espacioId, DateTime fechaInicio, DateTime fechaFin)
@@ -73,16 +71,15 @@ namespace Club.Controllers
             HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
             return RedirectToAction("Index");
         }
+
         public IActionResult Resumen()
         {
-            // Obtener el carrito de la sesión
             var carrito = HttpContext.Session.GetString("Carrito");
             if (string.IsNullOrEmpty(carrito))
             {
                 return View(new List<dynamic>());
             }
 
-            // Obtener el usuario logueado
             var usuarioId = HttpContext.Session.GetString("UsuarioId");
             if (string.IsNullOrEmpty(usuarioId))
             {
@@ -95,17 +92,13 @@ namespace Club.Controllers
                 return RedirectToAction("Login", "Usuario");
             }
 
-            // Deserializar el carrito
             var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
-
-            // Crear lista de datos para pasar a la vista
             var resumenConClubes = new List<dynamic>();
 
             foreach (var item in listaCarrito)
             {
                 int espacioId = (int)item.EspacioId;
 
-                // Obtener el espacio y el club asociado
                 var espacio = _context.Espacios.Include(e => e.Lugar)
                                 .FirstOrDefault(e => e.EspacioId == espacioId);
 
@@ -129,14 +122,9 @@ namespace Club.Controllers
                 }
             }
 
-            // Calcular el total
             ViewData["Total"] = resumenConClubes.Sum(r => (double)r.Precio);
 
             return View(resumenConClubes);
         }
-
-
-
-
     }
 }
