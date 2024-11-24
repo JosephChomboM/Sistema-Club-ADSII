@@ -1,6 +1,6 @@
-﻿// Models/Reservacion.cs
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Club.Models
 {
@@ -16,15 +16,19 @@ namespace Club.Models
         public int EspacioId { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
-        public DateTime FechaInicio { get; set; } // Fecha y hora de inicio
+        public DateTime FechaInicio { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
-        public DateTime FechaFin { get; set; } // Fecha y hora de fin
+        public DateTime FechaFin { get; set; }
 
         public string Detalles { get; set; }
 
+        // Relación con el espacio
         public Espacio Espacio { get; set; }
+
+        // Relación con el pago (opcional)
+        public int? PagoId { get; set; } // Asegúrate de que sea nullable
+        public Pago Pago { get; set; }
     }
+
 }

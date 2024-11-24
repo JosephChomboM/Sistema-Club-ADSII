@@ -13,6 +13,6 @@ namespace Club.Data
         public DbSet<Lugar> Lugares { get; set; }
         public DbSet<Espacio> Espacios { get; set; }
         public DbSet<Reservacion> Reservaciones { get; set; }
-
+        public DbSet<Pago> Pagos { get; set; }
     }
 }

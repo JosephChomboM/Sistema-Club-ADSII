@@ -4,6 +4,7 @@ using Club.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124000654_pagosv3")]
+    partial class pagosv3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,7 +121,8 @@ namespace Club.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EspacioId")
+                    b.Property<int?>("EspacioId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaFin")
@@ -128,6 +132,7 @@ namespace Club.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("PagoId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("UsuarioId")
@@ -228,7 +233,9 @@ namespace Club.Migrations
 
                     b.HasOne("Club.Models.Pago", "Pago")
                         .WithMany("Reservaciones")
-                        .HasForeignKey("PagoId");
+                        .HasForeignKey("PagoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Espacio");
 

@@ -13,7 +13,8 @@
             <th>Espacio</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
-            <th>Detalles</th>
+            <th>Total</th>
+            <th>Pago</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +23,21 @@
             <tr>
                 <td>@reservacion.ReservacionId</td>
                 <td>@reservacion.Espacio.Nombre</td>
-                <td>@reservacion.FechaInicio</td>
-                <td>@reservacion.FechaFin</td>
-                <td>@reservacion.Detalles</td>
+                <td>@reservacion.FechaInicio.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@reservacion.FechaFin.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    S/ @reservacion.Pago?.Total.ToString("F2")
+                </td>
+                <td>
+                    @if (reservacion.Pago != null)
+                    {
+                        <span class="badge bg-success"> @reservacion.Pago.Estado</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Pendiente</span>
+                    }
+                </td>
             </tr>
         }
     </tbody>

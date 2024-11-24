@@ -100,8 +100,46 @@ namespace Club.Controllers
         [HttpPost]
         public IActionResult Crear(int espacioId, DateTime fechaInicio, DateTime fechaFin, string detalles)
         {
-            // Reutiliza la lógica del CarritoController para manejar la adición
-            return RedirectToAction("Agregar", "Carrito", new { espacioId, fechaInicio, fechaFin });
+            var espacio = _context.Espacios.FirstOrDefault(e => e.EspacioId == espacioId);
+            if (espacio == null)
+            {
+                ModelState.AddModelError("", "El espacio seleccionado no existe.");
+                return View();
+            }
+
+            var reservacion = new Reservacion
+            {
+                UsuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId")),
+                EspacioId = espacioId,
+                FechaInicio = fechaInicio,
+                FechaFin = fechaFin,
+                Detalles = detalles
+            };
+
+            _context.Reservaciones.Add(reservacion);
+            _context.SaveChanges();
+
+            return RedirectToAction("ConsultarReservas");
+        }
+
+        public IActionResult ConsultarReservas()
+        {
+            // Verificar si el usuario está logueado
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+
+            var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+            // Obtener las reservas del usuario, incluyendo los pagos relacionados
+            var reservaciones = _context.Reservaciones
+                .Where(r => r.UsuarioId == usuarioId)
+                .Include(r => r.Espacio)
+                .Include(r => r.Pago) // Asegúrate de incluir la relación con Pago
+                .ToList();
+
+            return View(reservaciones);
         }
 
     }

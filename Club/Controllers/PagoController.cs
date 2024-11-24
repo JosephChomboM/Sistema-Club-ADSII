@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
 using Club.Data;
+using Club.Models;
 
 namespace Club.Controllers
 {
@@ -89,34 +90,68 @@ namespace Club.Controllers
             });
         }
 
-        [HttpGet]
         [Route("Pago/Return")]
         public IActionResult Return(string session_id)
         {
             if (string.IsNullOrEmpty(session_id))
             {
-                return View("Error"); // Vista de error personalizada
+                return RedirectToAction("Error", "Home");
             }
 
-            // Obtén la sesión de Stripe
-            var service = new Stripe.Checkout.SessionService();
+            var service = new SessionService();
             var session = service.Get(session_id);
 
-            // Verifica si el pago fue exitoso
             if (session.PaymentStatus == "paid")
             {
-                // Limpia el carrito
+                // Limpiar el carrito
+                var carritoJson = HttpContext.Session.GetString("Carrito");
+                if (string.IsNullOrEmpty(carritoJson))
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+
+                var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carritoJson);
+                var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+                // Crear el pago
+                var nuevoPago = new Pago
+                {
+                    UsuarioId = usuarioId,
+                    Total = listaCarrito.Sum(item => (decimal)item.Precio),
+                    Estado = "Confirmado",
+                    FechaPago = DateTime.Now
+                };
+                _context.Pagos.Add(nuevoPago);
+                _context.SaveChanges();
+
+                // Asociar las reservaciones al pago
+                foreach (var item in listaCarrito)
+                {
+                    var reservacion = new Reservacion
+                    {
+                        UsuarioId = usuarioId,
+                        EspacioId = (int)item.EspacioId,
+                        FechaInicio = (DateTime)item.FechaInicio,
+                        FechaFin = (DateTime)item.FechaFin,
+                        Detalles = "Reserva confirmada",
+                        PagoId = nuevoPago.Id // Asocia el pago a la reservación
+                    };
+
+                    _context.Reservaciones.Add(reservacion);
+                }
+                _context.SaveChanges();
+
+                // Limpia el carrito de la sesión
                 HttpContext.Session.Remove("Carrito");
 
-                // Redirige automáticamente a la vista ConsultarReservas
+                // Redirige a ConsultarReservas
                 return RedirectToAction("ConsultarReservas", "Reservacion");
             }
-            else
-            {
-                // Maneja el caso de error o cancelación del pago
-                return RedirectToAction("Resumen", "Carrito"); // Redirige al carrito
-            }
+
+            return RedirectToAction("Error", "Home");
         }
+
+
 
 
 
