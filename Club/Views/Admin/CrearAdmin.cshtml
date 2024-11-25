@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Crear Administrador";
+}
+
+<h2>Crear Nuevo Administrador</h2>
+
+<form asp-action="CrearAdmin" method="post">
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="Nombre" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input type="email" id="email" name="Email" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" name="Contrasena" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-success mt-3">Crear Administrador</button>
+</form>
+
+<!-- Mostrar mensaje de éxito -->
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<!-- Mostrar mensajes de error -->
+@if (!ViewData.ModelState.IsValid)
+{
+    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    {
+        <div class="text-danger">@error.ErrorMessage</div>
+    }
+}

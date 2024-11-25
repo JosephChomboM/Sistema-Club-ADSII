@@ -14,5 +14,11 @@ namespace Club.Data
         public DbSet<Espacio> Espacios { get; set; }
         public DbSet<Reservacion> Reservaciones { get; set; }
         public DbSet<Pago> Pagos { get; set; }
+        // Data/ApplicationDbContext.cs
+        public DbSet<Notificacion> Notificaciones { get; set; }
+        // Data/ApplicationDbContext.cs
+        public DbSet<Admin> Admins { get; set; }
+
+
     }
 }

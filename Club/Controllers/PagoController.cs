@@ -138,6 +138,17 @@ namespace Club.Controllers
                     };
 
                     _context.Reservaciones.Add(reservacion);
+
+                    // Crear notificación personalizada
+                    var espacio = _context.Espacios.FirstOrDefault(e => e.EspacioId == reservacion.EspacioId);
+                    var notificacion = new Notificacion
+                    {
+                        UsuarioId = usuarioId,
+                        Mensaje = $"Tu reserva para el espacio '{espacio.Nombre}' desde {reservacion.FechaInicio:yyyy-MM-dd HH:mm} hasta {reservacion.FechaFin:yyyy-MM-dd HH:mm} ha sido confirmada.",
+                        Fecha = DateTime.Now
+                    };
+
+                    _context.Notificaciones.Add(notificacion);
                 }
                 _context.SaveChanges();
 

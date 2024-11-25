@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<h2>Panel de Administración</h2>
+
+<p>Bienvenido al sistema de administración.</p>
+
+<ul>
+    <li><a asp-controller="Usuario" asp-action="Index">Gestión de Usuarios</a></li>
+    <li><a asp-controller="Reservacion" asp-action="Index">Gestión de Reservaciones</a></li>
+    <li><a asp-controller="Notificaciones" asp-action="Index">Enviar Notificaciones</a></li>
+</ul>
+
+<form asp-action="Logout" method="post">
+    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+</form>
