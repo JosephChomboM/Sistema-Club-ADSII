@@ -62,27 +62,57 @@ namespace Club.Controllers
         }
 
         // GET: Create a new club
+        // GET: Crear un nuevo club
         [HttpGet]
         public IActionResult CrearClub()
         {
-            return View();
+            // Devuelve un objeto vacío de Lugar para ser llenado en la vista
+            var lugar = new Lugar
+            {
+                Espacios = new List<Espacio>() // Inicializamos la lista de espacios
+            };
+            return View(lugar);
         }
 
-        // POST: Create a new club
         [HttpPost]
-        public IActionResult CrearClub(Lugar lugar)
+        public IActionResult CrearClub(Lugar lugar, List<Espacio> espacios)
         {
             if (!ModelState.IsValid)
             {
+                lugar.Espacios = espacios ?? new List<Espacio>();
                 return View(lugar);
             }
 
-            _context.Lugares.Add(lugar);
+            // Crear un nuevo lugar
+            var nuevoLugar = new Lugar
+            {
+                Nombre = lugar.Nombre,
+                Direccion = lugar.Direccion,
+                Descripcion = lugar.Descripcion,
+                LogoUrl = lugar.LogoUrl,
+                Espacios = new List<Espacio>()
+            };
+
+            // Agregar espacios al lugar
+            foreach (var espacio in espacios)
+            {
+                nuevoLugar.Espacios.Add(new Espacio
+                {
+                    Nombre = espacio.Nombre,
+                    Precio = espacio.Precio
+                });
+            }
+
+            _context.Lugares.Add(nuevoLugar);
             _context.SaveChanges();
 
             TempData["Mensaje"] = "Club creado exitosamente.";
             return RedirectToAction("Panel");
         }
+
+
+
+
 
         // GET: Edit Club and its Espacios
         [HttpGet]

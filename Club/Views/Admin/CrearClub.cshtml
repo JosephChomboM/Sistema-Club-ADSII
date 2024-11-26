@@ -1,11 +1,5 @@
 ﻿@model Club.Models.Lugar
 
-@{
-    ViewData["Title"] = "Crear Club";
-}
-
-<h2>Crear Nuevo Club</h2>
-
 <form asp-action="CrearClub" method="post">
     <div class="mb-3">
         <label for="Nombre" class="form-label">Nombre</label>
@@ -27,5 +21,43 @@
         <input asp-for="LogoUrl" class="form-control" />
         <span asp-validation-for="LogoUrl" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
+
+    <h4>Espacios del Club</h4>
+    <table id="espaciosTable" class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button type="button" id="addEspacioBtn" class="btn btn-secondary">Agregar Espacio</button>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
 </form>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const espaciosTable = document.getElementById("espaciosTable").getElementsByTagName("tbody")[0];
+        const addEspacioBtn = document.getElementById("addEspacioBtn");
+        let espacioCounter = 0;
+
+        addEspacioBtn.addEventListener("click", function () {
+            espacioCounter++;
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td><input type="text" name="espacios[${espacioCounter}].Nombre" class="form-control" required></td>
+                    <td><input type="number" name="espacios[${espacioCounter}].Precio" class="form-control" required></td>
+                    <td><button type="button" class="btn btn-danger btn-sm remove-espacio-btn">Eliminar</button></td>
+                `;
+            espaciosTable.appendChild(row);
+        });
+
+        espaciosTable.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-espacio-btn")) {
+                e.target.closest("tr").remove();
+            }
+        });
+    });
+</script>
