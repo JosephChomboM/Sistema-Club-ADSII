@@ -18,7 +18,9 @@ namespace Club.Models
 
         public bool Leido { get; set; } = false; // Indica si se ha leído la notificación
 
+        [Column(TypeName = "datetime2(0)")] // Solo hasta segundos, elimina fracciones innecesarias
         public DateTime Fecha { get; set; } = DateTime.Now;
+
 
         // Relación con el usuario
         public Usuario Usuario { get; set; }

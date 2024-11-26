@@ -52,6 +52,33 @@ namespace Club.Controllers
 
             return View(notificaciones); // Implicitly look for "Views/Notificacion/NotificacionesUsuario.cshtml"
         }
+        [HttpGet]
+        public IActionResult ObtenerNotificaciones()
+        {
+            var usuarioId = HttpContext.Session.GetString("UsuarioId");
+            if (string.IsNullOrEmpty(usuarioId))
+            {
+                return Json(new { success = false, message = "Usuario no logueado." });
+            }
+
+            int userId = int.Parse(usuarioId);
+
+            var notificaciones = _context.Notificaciones
+                .Where(n => n.UsuarioId == userId && !n.Leido)
+                .OrderByDescending(n => n.Fecha)
+                .Select(n => new
+                {
+                    n.NotificacionId,       // ID de la notificación
+                    n.Mensaje,              // El mensaje de la notificación
+                    Fecha = n.Fecha.ToString("dd/MM/yyyy HH:mm") // Formato legible
+                })
+                .ToList();
+
+            return Json(new { success = true, notificaciones });
+        }
+
+
+
 
     }
 }
