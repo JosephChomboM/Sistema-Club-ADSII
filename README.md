@@ -10,3 +10,4 @@ Descargar y
 - para admin:
 admin1@smart.pe
 contra: admin123
+- cupón de 90% descuento: `MONTOYA`
