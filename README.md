@@ -8,5 +8,5 @@ Descargar y
 - usuario: joseph.chombo@usil.pe
 - contraseña: 123
 - para admin:
-admin@smart.pe
+admin1@smart.pe
 contra: admin123
