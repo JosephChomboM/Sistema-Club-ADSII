@@ -1,7 +1,7 @@
-﻿// Controllers/NotificacionController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Club.Data;
-using System.Linq;
+using Club.Models;
 
 namespace Club.Controllers
 {
@@ -13,38 +13,45 @@ namespace Club.Controllers
         {
             _context = context;
         }
-
-        // Obtener notificaciones del usuario
-        [HttpGet]
-        public IActionResult ObtenerNotificaciones()
+        public IActionResult UsuariosParaMensajes()
         {
-            var usuarioId = HttpContext.Session.GetString("UsuarioId");
-            if (string.IsNullOrEmpty(usuarioId))
-                return Json(new { success = false, message = "Usuario no autenticado." });
+            var usuarios = _context.Usuarios.ToList();
+            return View(usuarios); // Implicitly look for "Views/Notificacion/UsuariosParaMensajes.cshtml"
+        }
 
-            int id = int.Parse(usuarioId);
+        public IActionResult CrearMensaje(int id)
+        {
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
 
+            var notificacion = new Notificacion
+            {
+                UsuarioId = usuario.UsuarioId,
+                Usuario = usuario
+            };
+
+            return View(notificacion); // Implicitly look for "Views/Notificacion/CrearMensaje.cshtml"
+        }
+
+        public IActionResult NotificacionesUsuario(int id)
+        {
             var notificaciones = _context.Notificaciones
-                .Where(n => n.UsuarioId == id && !n.Leido)
+                .Include(n => n.Usuario)
+                .Where(n => n.UsuarioId == id)
                 .OrderByDescending(n => n.Fecha)
-                .Select(n => new { n.Mensaje, n.Fecha, n.NotificacionId })
                 .ToList();
 
-            return Json(new { success = true, notificaciones });
+            if (!notificaciones.Any())
+            {
+                TempData["Mensaje"] = "No hay notificaciones para este usuario.";
+                return RedirectToAction("UsuariosParaMensajes");
+            }
+
+            return View(notificaciones); // Implicitly look for "Views/Notificacion/NotificacionesUsuario.cshtml"
         }
 
-        // Marcar una notificación como leída
-        [HttpPost]
-        public IActionResult MarcarComoLeida(int id)
-        {
-            var notificacion = _context.Notificaciones.FirstOrDefault(n => n.NotificacionId == id);
-            if (notificacion == null)
-                return Json(new { success = false, message = "Notificación no encontrada." });
-
-            notificacion.Leido = true;
-            _context.SaveChanges();
-
-            return Json(new { success = true });
-        }
     }
 }

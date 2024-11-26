@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Club.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuarios para Mensajes";
+}
+
+<h2>Usuarios para Mensajes</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.UsuarioId</td>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.Email</td>
+                <td>
+                    <a asp-action="CrearMensaje" asp-route-id="@usuario.UsuarioId" class="btn btn-primary btn-sm">Enviar Mensaje</a>
+                    <a asp-action="NotificacionesUsuario" asp-route-id="@usuario.UsuarioId" class="btn btn-info btn-sm">Ver Mensajes</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,17 @@
+﻿@model Club.Models.Notificacion
+
+@{
+    ViewData["Title"] = "Enviar Mensaje";
+}
+
+<h2>Enviar Mensaje a @Model.Usuario.Nombre</h2>
+
+<form asp-action="CrearMensaje" method="post">
+    <input type="hidden" asp-for="UsuarioId" />
+    <div class="mb-3">
+        <label for="Mensaje" class="form-label">Mensaje</label>
+        <textarea asp-for="Mensaje" class="form-control"></textarea>
+        <span asp-validation-for="Mensaje" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Enviar</button>
+</form>

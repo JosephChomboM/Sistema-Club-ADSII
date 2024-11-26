@@ -2,7 +2,6 @@
 using Club.Data;
 using Club.Models;
 using BCrypt.Net;
-using Club.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Club.Controllers

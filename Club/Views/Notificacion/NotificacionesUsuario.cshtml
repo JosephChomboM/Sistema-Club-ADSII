@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Club.Models.Notificacion>
+
+@{
+    ViewData["Title"] = "Mensajes para el Usuario";
+}
+
+<h2>Mensajes para @Model.FirstOrDefault()?.Usuario.Nombre</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notificacion in Model)
+        {
+                <tr>
+                    <td>@notificacion.Mensaje</td>
+                    <td>@notificacion.Fecha.ToString("g")</td>
+                    <td>@(notificacion.Leido ? "Leído" : "No leído")</td>
+                </tr>
+        }
+    </tbody>
+</table>
