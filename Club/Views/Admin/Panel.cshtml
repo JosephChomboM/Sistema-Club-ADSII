@@ -4,33 +4,47 @@
     ViewData["Title"] = "Administrar Clubes";
 }
 
-<h2>Administrar Clubes</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
 
-<a asp-action="CrearClub" class="btn btn-success mb-3">Crear Nuevo Club</a>
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Administrar Clubes</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Logo</th>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var club in Model)
-        {
-            <tr>
-                <td>
-                    <img src="@club.LogoUrl" alt="@club.Nombre" width="50" height="50" style="object-fit: contain;" />
-                </td>
-                <td>@club.Nombre</td>
-                <td>@club.Direccion</td>
-                <td>
-                    <a asp-action="EditarClub" asp-route-id="@club.LugarId" class="btn btn-warning btn-sm">Editar</a>
-                    <a asp-action="EliminarClub" asp-route-id="@club.LugarId" class="btn btn-danger btn-sm">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <a asp-action="CrearClub" class="clubsmart-btn clubsmart-btn-success mb-3">Crear Nuevo Club</a>
+
+        <table class="clubsmart-table">
+            <thead>
+                <tr>
+                    <th>Logo</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var club in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@club.LogoUrl" alt="@club.Nombre" class="clubsmart-image-small" />
+                        </td>
+                        <td>@club.Nombre</td>
+                        <td>@club.Direccion</td>
+                        <td>
+                            <a asp-action="EditarClub" asp-route-id="@club.LugarId" class="clubsmart-btn clubsmart-btn-warning clubsmart-btn-sm">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <a asp-action="EliminarClub" asp-route-id="@club.LugarId" class="clubsmart-btn clubsmart-btn-danger clubsmart-btn-sm">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

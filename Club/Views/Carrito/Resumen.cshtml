@@ -5,39 +5,41 @@
     var total = (double)ViewData["Total"];
 }
 
-<div class="container mt-4">
-    <!-- Título -->
-    <h2 class="mb-4">Revisar y Confirmar Compra</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
 
-    <div class="row">
-        <!-- Columna Izquierda -->
-        <div class="col-md-8">
-            <!-- Información de Contacto -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h5 class="mb-0">Información de Contacto</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Email:</strong> @Model.First().UsuarioEmail</p>
-                    <p><strong>Nombre:</strong> @Model.First().UsuarioNombre @Model.First().UsuarioApellido</p>
-                    <p><strong>DNI:</strong> @Model.First().UsuarioDNI</p>
-                    <p><strong>Teléfono:</strong> @Model.First().UsuarioTelefono</p>
-                    <p><strong>Dirección:</strong> @Model.First().UsuarioDireccion</p>
-                </div>
-                <div class="card-footer text-end">
-                    <a href="@Url.Action("EditarContacto", "Usuario")" class="btn btn-link">Editar</a>
-                </div>
-            </div>
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <!-- Título -->
+        <h2 class="clubsmart-header">Revisar y Confirmar Compra</h2>
 
-            <!-- Información de los Clubes -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h5 class="mb-0">Información de los Clubes</h5>
+        <div class="row">
+            <!-- Columna Izquierda -->
+            <div class="col-md-8">
+                <!-- Información de Contacto -->
+                <div class="clubsmart-card">
+                    <h5 class="clubsmart-subheader">Información de Contacto</h5>
+                    <div class="clubsmart-paragraph">
+                        <p><strong>Email:</strong> @Model.First().UsuarioEmail</p>
+                        <p><strong>Nombre:</strong> @Model.First().UsuarioNombre @Model.First().UsuarioApellido</p>
+                        <p><strong>DNI:</strong> @Model.First().UsuarioDNI</p>
+                        <p><strong>Teléfono:</strong> @Model.First().UsuarioTelefono</p>
+                        <p><strong>Dirección:</strong> @Model.First().UsuarioDireccion</p>
+                    </div>
+                    <div class="text-end">
+                        <a href="@Url.Action("EditarContacto", "Usuario")" class="clubsmart-btn clubsmart-btn-primary">Editar</a>
+                    </div>
                 </div>
-                <div class="card-body">
+
+                <!-- Información de los Clubes -->
+                <div class="clubsmart-card mt-4">
+                    <h5 class="clubsmart-subheader">Información de los Clubes</h5>
                     @foreach (var item in Model)
                     {
-                        <div class="mb-3">
+                        <div class="clubsmart-paragraph mb-3">
                             <p><strong>Club:</strong> @item.NombreClub</p>
                             <p><strong>Dirección:</strong> @item.DireccionClub</p>
                             <hr>
@@ -45,46 +47,38 @@
                     }
                 </div>
             </div>
-        </div>
 
-        <!-- Columna Derecha -->
-        <div class="col-md-4">
-            <!-- Resumen de Compra -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h5 class="mb-0">Resumen de Compra</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
+            <!-- Columna Derecha -->
+            <div class="col-md-4">
+                <!-- Resumen de Compra -->
+                <div class="clubsmart-card">
+                    <h5 class="clubsmart-subheader">Resumen de Compra</h5>
+                    <ul class="clubsmart-list">
                         @foreach (var item in Model)
                         {
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <li class="clubsmart-list-item">
                                 <div>
                                     <strong>@item.NombreEspacio</strong>
                                     <p class="mb-0">Desde: @item.FechaInicio.ToString("yyyy-MM-dd HH:mm") <br> Hasta: @item.FechaFin.ToString("yyyy-MM-dd HH:mm")</p>
                                 </div>
-                                <span>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</span>
+                                <span class="fw-bold">@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</span>
                             </li>
                         }
                     </ul>
-                </div>
-                <div class="card-footer">
-                    <p class="d-flex justify-content-between fw-bold">
+                    <div class="clubsmart-paragraph d-flex justify-content-between fw-bold">
                         <span>Total Pedido:</span>
                         <span>@total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</span>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Cupones y Pagar -->
-            <div class="card">
-                <div class="card-body">
-                    <h6>¿Tienes un cupón de descuento?</h6>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="CUPÓN">
-                        <button class="btn btn-dark">Aplicar</button>
                     </div>
-                    <button id="btnPagar" class="btn btn-primary btn-lg w-100 mt-3" data-bs-toggle="modal" data-bs-target="#stripeModal">
+                </div>
+
+                <!-- Cupones y Pagar -->
+                <div class="clubsmart-card mt-4">
+                    <h6 class="clubsmart-subheader">¿Tienes un cupón de descuento?</h6>
+                    <div class="input-group mb-3">
+                        <input type="text" class="clubsmart-form-control" placeholder="CUPÓN">
+                        <button class="clubsmart-btn clubsmart-btn-primary">Aplicar</button>
+                    </div>
+                    <button id="btnPagar" class="clubsmart-btn clubsmart-btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#stripeModal">
                         Pagar @total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))
                     </button>
                 </div>

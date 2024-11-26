@@ -4,41 +4,55 @@
     ViewData["Title"] = "Consultar Disponibilidad";
 }
 
-<h2>Consultar Disponibilidad para @ViewData["EspacioNombre"]</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+</head>
 
-<form asp-action="ConsultarDisponibilidad" asp-controller="Reservacion" method="get">
-    <input type="hidden" name="espacioId" value="@ViewData["EspacioId"]" />
-    <div class="form-group">
-        <label for="fecha">Selecciona una fecha:</label>
-        <input type="date" id="fecha" name="fecha" class="form-control" required />
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Consultar Disponibilidad para @ViewData["EspacioNombre"]</h2>
+
+        <!-- Formulario para seleccionar fecha -->
+        <form asp-action="ConsultarDisponibilidad" asp-controller="Reservacion" method="get" class="clubsmart-form">
+            <input type="hidden" name="espacioId" value="@ViewData["EspacioId"]" />
+            <div class="clubsmart-form-group">
+                <label for="fecha" class="clubsmart-form-label">Selecciona una fecha:</label>
+                <input type="date" id="fecha" name="fecha" class="clubsmart-form-control" required />
+            </div>
+            <button type="submit" class="clubsmart-btn clubsmart-btn-primary mt-2">Consultar Horarios</button>
+        </form>
+
+        @if (Model != null && Model.Any())
+        {
+            <h3 class="clubsmart-subheader">Horarios Disponibles para @ViewData["Fecha"]</h3>
+            <table class="clubsmart-table">
+                <thead>
+                    <tr>
+                        <th>Horario</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var horario in Model)
+                    {
+                        <tr>
+                            <td>
+                                @horario.Inicio.ToString("yyyy-MM-dd HH:mm") - @horario.Fin.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td>
+                                <a asp-action="Crear" asp-controller="Reservacion"
+                           asp-route-espacioId="@ViewData["EspacioId"]"
+                           asp-route-fechaInicio="@horario.Inicio"
+                           asp-route-fechaFin="@horario.Fin"
+                                   class="clubsmart-btn clubsmart-btn-success">
+                                    Reservar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
-    <button type="submit" class="btn btn-primary mt-2">Consultar Horarios</button>
-</form>
-
-@if (Model != null && Model.Any())
-{
-    <h3>Horarios Disponibles para @ViewData["Fecha"]</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Horario</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var horario in Model)
-            {
-                <tr>
-                    <td>@horario.Inicio.ToString("yyyy-MM-dd HH:mm") - @horario.Fin.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>
-                        <a asp-action="Crear" asp-controller="Reservacion"
-                   asp-route-espacioId="@ViewData["EspacioId"]"
-                   asp-route-fechaInicio="@horario.Inicio"
-                   asp-route-fechaFin="@horario.Fin"
-                           class="btn btn-success">Reservar</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+</div>

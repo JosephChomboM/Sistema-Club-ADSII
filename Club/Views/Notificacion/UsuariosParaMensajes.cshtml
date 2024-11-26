@@ -4,29 +4,41 @@
     ViewData["Title"] = "Usuarios para Mensajes";
 }
 
-<h2>Usuarios para Mensajes</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var usuario in Model)
-        {
-            <tr>
-                <td>@usuario.UsuarioId</td>
-                <td>@usuario.Nombre</td>
-                <td>@usuario.Email</td>
-                <td>
-                    <a asp-action="CrearMensaje" asp-route-id="@usuario.UsuarioId" class="btn btn-primary btn-sm">Enviar Mensaje</a>
-                    <a asp-action="NotificacionesUsuario" asp-route-id="@usuario.UsuarioId" class="btn btn-info btn-sm">Ver Mensajes</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Usuarios para Mensajes</h2>
+
+        <table class="clubsmart-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.UsuarioId</td>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.Email</td>
+                        <td>
+                            <a asp-action="CrearMensaje" asp-route-id="@usuario.UsuarioId"
+                               class="clubsmart-btn clubsmart-btn-primary clubsmart-btn-sm">
+                                <i class="bi bi-envelope"></i> Enviar Mensaje
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

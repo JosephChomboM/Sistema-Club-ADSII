@@ -1,0 +1,118 @@
+﻿/* Fondo global */
+html, body {
+    background-image: url('https://www.lamansiondelbosque.com/bundles/app/images/slider/01.jpg'); /* Imagen de fondo */
+    background-size: cover; /* La imagen cubre todo el contenedor */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita repeticiones */
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif; /* Fuente elegante */
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden; /* Previene desplazamientos horizontales */
+}
+
+/* Contenedor principal */
+.auth-page {
+    display: flex; /* Habilita Flexbox */
+    align-items: center; /* Centra verticalmente */
+    justify-content: center; /* Centra horizontalmente */
+    min-height: 100vh; /* Asegura que ocupe toda la ventana */
+    padding: 20px; /* Añade algo de espacio interno */
+}
+
+/* Contenedor del formulario */
+.auth-container {
+    max-width: 400px; /* Ancho máximo del formulario */
+    width: 100%; /* Se adapta al tamaño disponible */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco translúcido */
+    color: #4d4d33; /* Color del texto */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 30px; /* Espaciado interno */
+}
+
+/* Título */
+h2 {
+    color: #4d4d33; /* Color del título */
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Inputs del formulario */
+.form-control {
+    background-color: #f8f8f8; /* Fondo gris claro */
+    border: 1px solid #cccccc; /* Borde gris */
+    border-radius: 25px; /* Bordes redondeados */
+    font-size: 14px; /* Tamaño del texto */
+    padding: 10px 15px; /* Espaciado interno */
+}
+
+    .form-control:focus {
+        outline: none;
+        border: 1px solid #006400; /* Borde verde al enfocar */
+        box-shadow: 0 0 5px rgba(0, 100, 0, 0.5); /* Sombra verde */
+    }
+
+/* Botón */
+.btn {
+    background-color: #f8f8f8; /* Fondo claro */
+    color: #4d4d33; /* Texto oscuro */
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    transition: all 0.3s ease; /* Transición para hover */
+}
+
+    .btn:hover {
+        background-color: #006400; /* Fondo verde oscuro */
+        color: #ffffff; /* Texto blanco */
+    }
+
+/* ====== RESPONSIVIDAD ====== */
+
+/* En pantallas medianas (tabletas) */
+@media (max-width: 768px) {
+    .auth-page {
+        padding: 10px;
+    }
+
+    .auth-container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 1.5rem; /* Tamaño del título más pequeño */
+    }
+
+    .form-control {
+        font-size: 13px;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+    }
+}
+
+/* En pantallas pequeñas (móviles) */
+@media (max-width: 576px) {
+    .auth-container {
+        max-width: 90%; /* Ancho máximo del formulario */
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.2rem; /* Tamaño del título más reducido */
+    }
+
+    .form-control {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+        padding: 8px 15px;
+    }
+}

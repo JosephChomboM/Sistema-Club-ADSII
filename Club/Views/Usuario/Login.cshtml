@@ -2,48 +2,46 @@
     ViewData["Title"] = "Iniciar Sesión";
 }
 
-<h2>Iniciar Sesión</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+<div class="login-page d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <!-- Contenedor principal con imagen de fondo -->
+    <div class="login-container text-center p-5 rounded shadow">
+        <!-- Icono de usuario -->
+        <div class="user-icon mb-4">
+            <i class="fas fa-user-circle fa-5x"></i>
+        </div>
+        <h1 class="mb-4">Bienvenido a<br><span class="fw-bold">Club Smart</span></h1>
 
-<div class="row">
-    <!-- Formulario de inicio de sesión -->
-    <div class="col-md-8">
-        <form asp-action="Login" method="post">
-            <div class="form-group">
-                <label for="email">Correo Electrónico</label>
-                <input type="email" id="email" name="email" class="form-control" />
+        <!-- Formulario de inicio de sesión -->
+        <form asp-action="Login" method="post" class="mb-4">
+            <div class="form-group mb-3">
+                <label for="email" class="form-label fw-bold">USUARIO:</label>
+                <input type="email" id="email" name="email" class="form-control rounded-pill p-2" placeholder="Enter your email" required />
             </div>
-            <div class="form-group">
-                <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" name="contrasena" class="form-control" />
+            <div class="form-group mb-4">
+                <label for="contrasena" class="form-label fw-bold">CONTRASEÑA:</label>
+                <input type="password" id="contrasena" name="contrasena" class="form-control rounded-pill p-2" placeholder="Enter your password" required />
             </div>
-            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-light rounded-pill px-4 py-2 shadow">LOGIN</button>
         </form>
-
-        <!-- Mostrar mensajes de error -->
-        @if (!ViewData.ModelState.IsValid)
-        {
-            foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <p class="text-danger">@error.ErrorMessage</p>
-            }
-        }
 
         <!-- Mensaje de éxito -->
         @if (TempData["Mensaje"] != null)
         {
             <p class="text-success">@TempData["Mensaje"]</p>
         }
+
+        <!-- Botón de acceso administrador -->
         <div class="text-center">
             <a asp-action="LoginAdmin" asp-controller="Admin" class="btn btn-outline-secondary">
                 <i class="bi bi-shield-lock"></i> Acceso Administrador
             </a>
         </div>
-    </div>
-    <!-- Botón para registrarse -->
-    <div class="col-md-4 d-flex align-items-center">
-        <div>
-            <h4>¿No tienes una cuenta?</h4>
-            <a asp-action="Registrar" asp-controller="Usuario" class="btn btn-secondary">Ir a Registrar</a>
-        </div>
+
+        <!-- Link a registro -->
+        <p class="text-dark mt-3">No tienes una cuenta? <a asp-action="Registrar" asp-controller="Usuario" class="text-dark fw-bold underline">Registrate</a></p>
     </div>
 </div>

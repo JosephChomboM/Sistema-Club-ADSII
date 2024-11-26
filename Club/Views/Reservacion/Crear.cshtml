@@ -4,14 +4,32 @@
     ViewData["Title"] = "Registrar Reservación";
 }
 
-<h2>Registrar Reservación para @Model.EspacioNombre</h2>
-<p>Desde: <strong>@Model.FechaInicio.ToString("yyyy-MM-dd HH:mm")</strong></p>
-<p>Hasta: <strong>@Model.FechaFin.ToString("yyyy-MM-dd HH:mm")</strong></p>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+</head>
 
-<form asp-action="Agregar" asp-controller="Carrito" method="post">
-    <input type="hidden" name="espacioId" value="@Model.EspacioId" />
-    <input type="hidden" name="fechaInicio" value="@Model.FechaInicio" />
-    <input type="hidden" name="fechaFin" value="@Model.FechaFin" />
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <div class="clubsmart-card text-center">
+            <h2 class="clubsmart-header">Registrar Reservación para @Model.EspacioNombre</h2>
 
-    <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
-</form>
+            <p class="clubsmart-paragraph">
+                Desde: <strong>@Model.FechaInicio.ToString("yyyy-MM-dd HH:mm")</strong>
+            </p>
+            <p class="clubsmart-paragraph">
+                Hasta: <strong>@Model.FechaFin.ToString("yyyy-MM-dd HH:mm")</strong>
+            </p>
+
+            <form asp-action="Agregar" asp-controller="Carrito" method="post" class="clubsmart-form">
+                <input type="hidden" name="espacioId" value="@Model.EspacioId" />
+                <input type="hidden" name="fechaInicio" value="@Model.FechaInicio" />
+                <input type="hidden" name="fechaFin" value="@Model.FechaFin" />
+
+                <button type="submit" class="clubsmart-btn clubsmart-btn-primary">
+                    Agregar al Carrito
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,21 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Acceso Administrador";
 }
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
 
-<h2>Acceso Administrador</h2>
+<div class="login-page d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <!-- Contenedor principal -->
+    <div class="login-container text-center p-5 rounded shadow">
+        <h2 class="mb-4">Acceso Administrador</h2>
 
-<div class="row">
-    <div class="col-md-8">
+        <!-- Formulario de inicio de sesión -->
         <form asp-action="LoginAdmin" method="post">
-            <div class="form-group">
-                <label for="email">Correo Electrónico</label>
-                <input type="email" id="email" name="email" class="form-control" />
+            <div class="form-group mb-3">
+                <label for="email" class="form-label fw-bold">CORREO ELECTRÓNICO:</label>
+                <input type="email" id="email" name="email" class="form-control rounded-pill p-2" placeholder="Ingresa tu correo" required />
             </div>
-            <div class="form-group">
-                <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" name="contrasena" class="form-control" />
+            <div class="form-group mb-4">
+                <label for="contrasena" class="form-label fw-bold">CONTRASEÑA:</label>
+                <input type="password" id="contrasena" name="contrasena" class="form-control rounded-pill p-2" placeholder="Ingresa tu contraseña" required />
             </div>
-            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-light rounded-pill px-4 py-2 shadow">INICIAR SESIÓN</button>
         </form>
 
         <!-- Mostrar mensajes de error -->
@@ -23,20 +29,22 @@
         {
             foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
             {
-                <p class="text-danger">@error.ErrorMessage</p>
+                <p class="text-danger mt-3">@error.ErrorMessage</p>
             }
         }
 
         <!-- Mensaje de éxito -->
         @if (TempData["Mensaje"] != null)
         {
-            <p class="text-success">@TempData["Mensaje"]</p>
+            <p class="text-success mt-3">@TempData["Mensaje"]</p>
         }
-    </div>
 
-    <div class="col-md-4">
-        <h4>Opciones de Administración</h4>
-        <a asp-action="CrearAdmin" asp-controller="Admin" class="btn btn-secondary">Crear Nuevo Admin</a>
+        <!-- Opciones adicionales -->
+        <div class="mt-4">
+            <h4 class="fw-bold mb-3">Opciones de Administración</h4>
+            <a asp-action="CrearAdmin" asp-controller="Admin" class="btn btn-outline-secondary">
+                Crear Nuevo Admin
+            </a>
+        </div>
     </div>
-
 </div>

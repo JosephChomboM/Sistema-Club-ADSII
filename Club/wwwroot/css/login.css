@@ -1,0 +1,73 @@
+﻿/* Fondo global */
+html, body {
+    background-image: url('https://www.lamansiondelbosque.com/bundles/app/images/slider/01.jpg'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Contenedor del formulario */
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    text-align: center;
+}
+
+/* Inputs */
+.form-control {
+    background-color: #f8f8f8;
+    border: 1px solid #cccccc;
+    border-radius: 25px;
+    font-size: 14px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+}
+
+    .form-control:focus {
+        border: 1px solid #006400;
+        box-shadow: 0 0 5px rgba(0, 100, 0, 0.5);
+    }
+
+/* Botón */
+.btn {
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+    .btn:hover {
+        background-color: #006400;
+        color: white;
+    }
+
+/* Mensaje de éxito */
+.text-success {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Link a registro */
+.text-dark a {
+    color: #4d4d33;
+}
+
+    .text-dark a:hover {
+        color: #006400;
+    }

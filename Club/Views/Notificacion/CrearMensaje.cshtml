@@ -4,14 +4,29 @@
     ViewData["Title"] = "Enviar Mensaje";
 }
 
-<h2>Enviar Mensaje a @Model.Usuario.Nombre</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+</head>
 
-<form asp-action="CrearMensaje" method="post">
-    <input type="hidden" asp-for="UsuarioId" />
-    <div class="mb-3">
-        <label for="Mensaje" class="form-label">Mensaje</label>
-        <textarea asp-for="Mensaje" class="form-control"></textarea>
-        <span asp-validation-for="Mensaje" class="text-danger"></span>
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Enviar Mensaje a @Model.Usuario.Nombre</h2>
+
+        <form asp-action="CrearMensaje" method="post" class="clubsmart-form">
+            <input type="hidden" asp-for="UsuarioId" />
+
+            <!-- Mensaje -->
+            <div class="clubsmart-form-group">
+                <label for="Mensaje" class="clubsmart-form-label">Mensaje</label>
+                <textarea asp-for="Mensaje" class="clubsmart-form-control"></textarea>
+                <span asp-validation-for="Mensaje" class="clubsmart-validation-error"></span>
+            </div>
+
+            <!-- Botón Enviar -->
+            <button type="submit" class="clubsmart-btn clubsmart-btn-success">
+                <i class="bi bi-send"></i> Enviar
+            </button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-success">Enviar</button>
-</form>
+</div>

@@ -1,0 +1,346 @@
+﻿/* Fondo global para páginas específicas */
+/* Fondo global */
+html, body {
+    background-color: #9d9d78;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+.clubsmart-page {
+    background-color: #9d9d78; /* Fondo global */
+    color: #4d4d33; /* Color del texto */
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Contenedor principal */
+.clubsmart-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Encabezados personalizados */
+.clubsmart-header {
+    text-align: center;
+    color: #4d4d33;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+.clubsmart-subheader {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Párrafos personalizados */
+.clubsmart-paragraph {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Botones */
+.clubsmart-btn {
+    background-color: #4d4d33;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+    .clubsmart-btn:hover {
+        background-color: #006400;
+        color: white;
+    }
+
+.clubsmart-btn-primary {
+    background-color: #006400;
+}
+
+    .clubsmart-btn-primary:hover {
+        background-color: #004d00;
+    }
+
+/* Tarjetas */
+.clubsmart-card {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco translúcido */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+/* Tarjetas para espacios disponibles */
+.clubsmart-card {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo translúcido */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 15px;
+    transition: transform 0.3s ease; /* Efecto hover */
+}
+
+    .clubsmart-card:hover {
+        transform: translateY(-5px); /* Eleva la tarjeta al pasar el cursor */
+    }
+
+/* Encabezados dentro de las tarjetas */
+.clubsmart-subheader {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #4d4d33;
+}
+
+/* Tablas */
+.clubsmart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    .clubsmart-table th, .clubsmart-table td {
+        border: 1px solid #cccccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .clubsmart-table th {
+        background-color: #4d4d33;
+        color: white;
+        font-weight: bold;
+    }
+
+    .clubsmart-table td {
+        background-color: #f8f8f8;
+    }
+
+/* Formularios */
+.clubsmart-form-group {
+    margin-bottom: 15px;
+}
+
+.clubsmart-form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+}
+
+    .clubsmart-form-control:focus {
+        border-color: #006400;
+        box-shadow: 0 0 5px rgba(0, 100, 0, 0.5);
+        outline: none;
+    }
+
+/* Radios y Checkboxes */
+.clubsmart-radio, .clubsmart-checkbox {
+    margin-right: 10px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .clubsmart-header {
+        font-size: 1.5rem;
+    }
+
+    .clubsmart-paragraph, .clubsmart-btn {
+        font-size: 0.9rem;
+    }
+
+    .clubsmart-card {
+        padding: 15px;
+    }
+
+    .clubsmart-table th, .clubsmart-table td {
+        padding: 8px;
+    }
+}
+/* Botón de éxito */
+.clubsmart-btn-success {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+    .clubsmart-btn-success:hover {
+        background-color: #218838; /* Verde oscuro */
+    }
+
+/* Tablas */
+.clubsmart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+    .clubsmart-table th {
+        background-color: #4d4d33;
+        color: white;
+        padding: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .clubsmart-table td {
+        background-color: #f8f8f8;
+        padding: 10px;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .clubsmart-table tr:hover {
+        background-color: #e8e8e8; /* Resalta la fila al pasar el cursor */
+    }
+/* Tablas */
+.clubsmart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+    .clubsmart-table th {
+        background-color: #4d4d33; /* Fondo oscuro */
+        color: white; /* Texto blanco */
+        padding: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .clubsmart-table td {
+        background-color: #f8f8f8; /* Fondo claro */
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .clubsmart-table tr:hover {
+        background-color: #e8e8e8; /* Resalta la fila al pasar el cursor */
+    }
+
+/* Imágenes pequeñas */
+.clubsmart-image-small {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 5px; /* Bordes ligeramente redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Botones */
+.clubsmart-btn-sm {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+.clubsmart-btn-warning {
+    background-color: #ffc107; /* Amarillo */
+    color: black;
+    border: none;
+}
+
+    .clubsmart-btn-warning:hover {
+        background-color: #e0a800;
+        color: black;
+    }
+
+.clubsmart-btn-danger {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+    border: none;
+}
+
+    .clubsmart-btn-danger:hover {
+        background-color: #c82333;
+        color: white;
+    }
+
+.clubsmart-btn-success {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+    .clubsmart-btn-success:hover {
+        background-color: #218838;
+        color: white;
+    }
+/* Formulario */
+.clubsmart-form-group {
+    margin-bottom: 15px;
+}
+
+.clubsmart-form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s ease;
+}
+
+    .clubsmart-form-control:focus {
+        border-color: #006400;
+        box-shadow: 0 0 5px rgba(0, 100, 0, 0.5);
+    }
+
+/* Validación */
+.clubsmart-validation-error {
+    color: #dc3545;
+    font-size: 0.9rem;
+}
+
+/* Botones */
+.clubsmart-btn-sm {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+
+.clubsmart-btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+    .clubsmart-btn-danger:hover {
+        background-color: #c82333;
+    }
+
+.clubsmart-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+    .clubsmart-btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+/* Tablas */
+.clubsmart-table th {
+    background-color: #4d4d33;
+    color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+.clubsmart-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.clubsmart-table tr:hover {
+    background-color: #e8e8e8;
+}
+

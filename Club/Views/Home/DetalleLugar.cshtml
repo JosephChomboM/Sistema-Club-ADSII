@@ -4,12 +4,30 @@
     ViewData["Title"] = "Detalle de Lugar";
 }
 
-<h2>Espacios Disponibles en @ViewData["LugarNombre"]</h2>
-<p>@ViewData["LugarDireccion"]</p>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+</head>
 
-@foreach (var espacio in Model)
-{
-    <h5>@espacio.Nombre</h5>
-    <a asp-action="ConsultarDisponibilidad" asp-controller="Reservacion"
-   asp-route-espacioId="@espacio.EspacioId" class="btn btn-primary">Ver Disponibilidad</a>
-}
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Espacios Disponibles en @ViewData["LugarNombre"]</h2>
+        <p class="clubsmart-paragraph">@ViewData["LugarDireccion"]</p>
+
+        <div class="row">
+            @foreach (var espacio in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="clubsmart-card text-center">
+                        <h5 class="clubsmart-subheader">@espacio.Nombre</h5>
+                        <a asp-action="ConsultarDisponibilidad" asp-controller="Reservacion"
+                       asp-route-espacioId="@espacio.EspacioId"
+                           class="clubsmart-btn clubsmart-btn-primary">
+                            Ver Disponibilidad
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

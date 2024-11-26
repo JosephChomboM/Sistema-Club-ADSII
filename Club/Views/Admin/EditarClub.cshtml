@@ -5,67 +5,90 @@
     var espacios = Model.Espacios.ToList(); // Convertimos a List para manejar índices
 }
 
-<h2>Editar Club</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
 
-<form asp-action="EditarClub" method="post">
-    <input type="hidden" asp-for="LugarId" />
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Editar Club</h2>
 
-    <div class="mb-3">
-        <label asp-for="Nombre" class="form-label">Nombre</label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+        <form asp-action="EditarClub" method="post" class="clubsmart-form">
+            <input type="hidden" asp-for="LugarId" />
+
+            <!-- Nombre -->
+            <div class="clubsmart-form-group">
+                <label asp-for="Nombre" class="clubsmart-form-label">Nombre</label>
+                <input asp-for="Nombre" class="clubsmart-form-control" />
+                <span asp-validation-for="Nombre" class="clubsmart-validation-error"></span>
+            </div>
+
+            <!-- Dirección -->
+            <div class="clubsmart-form-group">
+                <label asp-for="Direccion" class="clubsmart-form-label">Dirección</label>
+                <input asp-for="Direccion" class="clubsmart-form-control" />
+                <span asp-validation-for="Direccion" class="clubsmart-validation-error"></span>
+            </div>
+
+            <!-- Descripción -->
+            <div class="clubsmart-form-group">
+                <label asp-for="Descripcion" class="clubsmart-form-label">Descripción</label>
+                <textarea asp-for="Descripcion" class="clubsmart-form-control"></textarea>
+                <span asp-validation-for="Descripcion" class="clubsmart-validation-error"></span>
+            </div>
+
+            <!-- URL del Logo -->
+            <div class="clubsmart-form-group">
+                <label asp-for="LogoUrl" class="clubsmart-form-label">URL del Logo</label>
+                <input asp-for="LogoUrl" class="clubsmart-form-control" />
+                <span asp-validation-for="LogoUrl" class="clubsmart-validation-error"></span>
+            </div>
+
+            <!-- Espacios del Club -->
+            <h3 class="clubsmart-subheader">Espacios del Club</h3>
+            <table class="clubsmart-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="espaciosTable">
+                    @for (var i = 0; i < espacios.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" name="espacios[@i].EspacioId" value="@espacios[i].EspacioId" />
+                                <input type="text" name="espacios[@i].Nombre" value="@espacios[i].Nombre" class="clubsmart-form-control" />
+                            </td>
+                            <td>
+                                <input type="number" name="espacios[@i].Precio" value="@espacios[i].Precio" class="clubsmart-form-control" step="0.01" />
+                            </td>
+                            <td>
+                                <button type="button" class="clubsmart-btn clubsmart-btn-danger clubsmart-btn-sm" onclick="eliminarFila(this)">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Botón Agregar Espacio -->
+            <button type="button" id="agregarEspacio" class="clubsmart-btn clubsmart-btn-secondary">
+                <i class="bi bi-plus"></i> Agregar Espacio
+            </button>
+
+            <!-- Botón Guardar Cambios -->
+            <button type="submit" class="clubsmart-btn clubsmart-btn-primary mt-3">
+                <i class="bi bi-save"></i> Guardar Cambios
+            </button>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Direccion" class="form-label">Dirección</label>
-        <input asp-for="Direccion" class="form-control" />
-        <span asp-validation-for="Direccion" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Descripcion" class="form-label">Descripción</label>
-        <textarea asp-for="Descripcion" class="form-control"></textarea>
-        <span asp-validation-for="Descripcion" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="LogoUrl" class="form-label">URL del Logo</label>
-        <input asp-for="LogoUrl" class="form-control" />
-        <span asp-validation-for="LogoUrl" class="text-danger"></span>
-    </div>
-
-    <h3>Espacios del Club</h3>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="espaciosTable">
-            @for (var i = 0; i < espacios.Count; i++)
-            {
-                <tr>
-                    <td>
-                        <input type="hidden" name="espacios[@i].EspacioId" value="@espacios[i].EspacioId" />
-                        <input type="text" name="espacios[@i].Nombre" value="@espacios[i].Nombre" class="form-control" />
-                    </td>
-                    <td>
-                        <input type="number" name="espacios[@i].Precio" value="@espacios[i].Precio" class="form-control" step="0.01" />
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <button type="button" class="btn btn-secondary" id="agregarEspacio">Agregar Espacio</button>
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-</form>
+</div>
 
 <script>
     document.getElementById('agregarEspacio').addEventListener('click', function () {
@@ -73,9 +96,13 @@
         const rowCount = tableBody.children.length; // Obtén el número actual de filas
         const newRow = `
                 <tr>
-                    <td><input type="text" name="espacios[${rowCount}].Nombre" class="form-control" /></td>
-                    <td><input type="number" name="espacios[${rowCount}].Precio" class="form-control" step="0.01" /></td>
-                    <td><button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    <td><input type="text" name="espacios[${rowCount}].Nombre" class="clubsmart-form-control" /></td>
+                    <td><input type="number" name="espacios[${rowCount}].Precio" class="clubsmart-form-control" step="0.01" /></td>
+                    <td>
+                        <button type="button" class="clubsmart-btn clubsmart-btn-danger clubsmart-btn-sm remove-espacio-btn">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </td>
                 </tr>`;
         tableBody.insertAdjacentHTML('beforeend', newRow);
     });

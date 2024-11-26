@@ -4,74 +4,86 @@
     ViewData["Title"] = "Carrito de Compras";
 }
 
-<h2>Carrito de Compras</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Espacio</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Precio</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.NombreEspacio</td>
-                    <td>@item.FechaInicio.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@item.FechaFin.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <!-- Botón de disminuir -->
-                            <form asp-action="Disminuir" asp-controller="Carrito" method="post" style="display:inline;">
-                                <input type="hidden" name="espacioId" value="@item.EspacioId" />
-                                <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
-                                <input type="hidden" name="fechaFin" value="@item.FechaFin" />
-                                <button class="btn btn-outline-danger btn-sm me-2">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                            </form>
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Carrito de Compras</h2>
 
-                            <!-- Número de horas -->
-                            <div class="border px-2 py-1 text-center" style="width: 50px;">
-                                @(((DateTime)item.FechaFin).Subtract((DateTime)item.FechaInicio).TotalHours)
-                            </div>
+        @if (Model != null && Model.Any())
+        {
+            <table class="clubsmart-table">
+                <thead>
+                    <tr>
+                        <th>Espacio</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Precio</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.NombreEspacio</td>
+                            <td>@item.FechaInicio.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@item.FechaFin.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@item.Precio.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</td>
+                            <td>
+                                <div class="clubsmart-action-buttons">
+                                    <!-- Botón de disminuir -->
+                                    <form asp-action="Disminuir" asp-controller="Carrito" method="post" class="clubsmart-inline-form">
+                                        <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                                        <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                                        <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                                        <button class="clubsmart-btn-icon clubsmart-btn-danger">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                    </form>
 
-                            <!-- Botón de aumentar -->
-                            <form asp-action="Aumentar" asp-controller="Carrito" method="post" style="display:inline;">
-                                <input type="hidden" name="espacioId" value="@item.EspacioId" />
-                                <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
-                                <input type="hidden" name="fechaFin" value="@item.FechaFin" />
-                                <button class="btn btn-outline-success btn-sm ms-2">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </form>
+                                    <!-- Número de horas -->
+                                    <div class="clubsmart-hours">
+                                        @(((DateTime)item.FechaFin).Subtract((DateTime)item.FechaInicio).TotalHours)
+                                    </div>
 
-                            <!-- Botón de eliminar -->
-                            <form asp-action="Eliminar" asp-controller="Carrito" method="post" style="display:inline; margin-left: 10px;">
-                                <input type="hidden" name="espacioId" value="@item.EspacioId" />
-                                <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
-                                <input type="hidden" name="fechaFin" value="@item.FechaFin" />
-                                <button class="btn btn-outline-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
+                                    <!-- Botón de aumentar -->
+                                    <form asp-action="Aumentar" asp-controller="Carrito" method="post" class="clubsmart-inline-form">
+                                        <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                                        <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                                        <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                                        <button class="clubsmart-btn-icon clubsmart-btn-success">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </form>
 
-                </tr>
-            }
-        </tbody>
-    </table>
-    <a asp-action="Resumen" asp-controller="Carrito" class="btn btn-success">Continuar Pago</a>
-}
-else
-{
-    <p>No tienes reservas en el carrito.</p>
-}
+                                    <!-- Botón de eliminar -->
+                                    <form asp-action="Eliminar" asp-controller="Carrito" method="post" class="clubsmart-inline-form">
+                                        <input type="hidden" name="espacioId" value="@item.EspacioId" />
+                                        <input type="hidden" name="fechaInicio" value="@item.FechaInicio" />
+                                        <input type="hidden" name="fechaFin" value="@item.FechaFin" />
+                                        <button class="clubsmart-btn-icon clubsmart-btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <a asp-action="Resumen" asp-controller="Carrito" class="clubsmart-btn clubsmart-btn-primary">
+                Continuar Pago
+            </a>
+        }
+        else
+        {
+            <p class="clubsmart-paragraph">No tienes reservas en el carrito.</p>
+        }
+    </div>
+</div>

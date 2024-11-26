@@ -4,24 +4,37 @@
     ViewData["Title"] = "Mensajes para el Usuario";
 }
 
-<h2>Mensajes para @Model.FirstOrDefault()?.Usuario.Nombre</h2>
+<head>
+    <!-- Vínculo correcto al archivo CSS -->
+    <link rel="stylesheet" href="/css/clubsmart.css" />
+</head>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Mensaje</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var notificacion in Model)
-        {
+<div class="clubsmart-page">
+    <div class="clubsmart-container">
+        <h2 class="clubsmart-header">Mensajes para @Model.FirstOrDefault()?.Usuario.Nombre</h2>
+
+        <table class="clubsmart-table">
+            <thead>
                 <tr>
-                    <td>@notificacion.Mensaje</td>
-                    <td>@notificacion.Fecha.ToString("g")</td>
-                    <td>@(notificacion.Leido ? "Leído" : "No leído")</td>
+                    <th>Mensaje</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
                 </tr>
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @foreach (var notificacion in Model)
+                {
+                    <tr>
+                        <td>@notificacion.Mensaje</td>
+                        <td>@notificacion.Fecha.ToString("g")</td>
+                        <td>
+                            <span class="@(notificacion.Leido ? "clubsmart-badge-success" : "clubsmart-badge-danger")">
+                                @(notificacion.Leido ? "Leído" : "No leído")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
