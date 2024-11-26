@@ -65,23 +65,41 @@
                             </li>
                         }
                     </ul>
-                    <div class="clubsmart-paragraph d-flex justify-content-between fw-bold">
-                        <span>Total Pedido:</span>
-                        <span>@total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))</span>
+                    <!-- Cupones y Pagar -->
+                    <div class="clubsmart-card mt-4">
+                        <h6 class="clubsmart-subheader">¿Tienes un cupón de descuento?</h6>
+                        <form asp-action="AplicarCupon" method="post">
+                            <div class="input-group mb-3">
+                                <input type="text" name="cupon" class="clubsmart-form-control" placeholder="CUPÓN">
+                                <button type="submit" class="clubsmart-btn clubsmart-btn-primary">Aplicar</button>
+                            </div>
+                        </form>
+
+                        @if (TempData["MensajeError"] != null)
+                        {
+                            <div class="text-danger">@TempData["MensajeError"]</div>
+                        }
+
+                        <div class="clubsmart-paragraph d-flex justify-content-between fw-bold">
+                            <span>Total Pedido:</span>
+                            <span>S/ @(string.Format("{0:F2}", (double)ViewData["Total"]))</span>
+                        </div>
+
+                        @if (ViewData["DescuentoAplicado"] != null)
+                        {
+                            <div class="clubsmart-paragraph d-flex justify-content-between text-success fw-bold">
+                                <span>Descuento Aplicado:</span>
+                                <span>-S/ @(string.Format("{0:F2}", (double)ViewData["DescuentoAplicado"]))</span>
+                            </div>
+                        }
+
+                        <button id="btnPagar" class="clubsmart-btn clubsmart-btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#stripeModal">
+                            Pagar S/ @(string.Format("{0:F2}", (double)ViewData["Total"]))
+                        </button>
                     </div>
+
                 </div>
 
-                <!-- Cupones y Pagar -->
-                <div class="clubsmart-card mt-4">
-                    <h6 class="clubsmart-subheader">¿Tienes un cupón de descuento?</h6>
-                    <div class="input-group mb-3">
-                        <input type="text" class="clubsmart-form-control" placeholder="CUPÓN">
-                        <button class="clubsmart-btn clubsmart-btn-primary">Aplicar</button>
-                    </div>
-                    <button id="btnPagar" class="clubsmart-btn clubsmart-btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#stripeModal">
-                        Pagar @total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-PE"))
-                    </button>
-                </div>
             </div>
         </div>
     </div>

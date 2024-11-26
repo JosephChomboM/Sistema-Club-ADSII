@@ -157,8 +157,16 @@ namespace Club.Controllers
 
             ViewData["Total"] = resumenConClubes.Sum(r => (double)r.Precio);
 
+            var totalConDescuento = HttpContext.Session.GetString("TotalConDescuento");
+            if (!string.IsNullOrEmpty(totalConDescuento))
+            {
+                ViewData["Total"] = double.Parse(totalConDescuento);
+                ViewData["DescuentoAplicado"] = resumenConClubes.Sum(r => (double)r.Precio) - double.Parse(totalConDescuento);
+            }
+
             return View(resumenConClubes);
         }
+
         // Aumentar una hora al espacio en el carrito
         [HttpPost]
         public IActionResult Aumentar(int espacioId, DateTime fechaInicio, DateTime fechaFin)
@@ -213,6 +221,46 @@ namespace Club.Controllers
             HttpContext.Session.SetString("Carrito", JsonConvert.SerializeObject(listaCarrito));
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        [HttpPost]
+        public IActionResult AplicarCupon(string cupon)
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            if (string.IsNullOrEmpty(carritoJson))
+            {
+                TempData["MensajeError"] = "El carrito está vacío.";
+                return RedirectToAction("Resumen");
+            }
+
+            var carrito = JsonConvert.DeserializeObject<List<dynamic>>(carritoJson);
+
+            // Calcular el total
+            double total = carrito.Sum(item => (double)item.Precio);
+
+            // Verificar el cupón
+            double descuento = 0;
+            if (cupon.ToUpper() == "MONTOYA")
+            {
+                descuento = total * 0.90; 
+                total -= descuento;
+                ViewData["DescuentoAplicado"] = descuento;
+            }
+            else
+            {
+                TempData["MensajeError"] = "El cupón ingresado no es válido.";
+            }
+
+            // Actualizar el ViewData
+            ViewData["Total"] = total;
+
+            // Guardar el descuento en la sesión para usarlo en el pago
+            HttpContext.Session.SetString("Descuento", descuento.ToString());
+            HttpContext.Session.SetString("TotalConDescuento", total.ToString());
+
+            return RedirectToAction("Resumen");
+        }
+
+
 
     }
 }

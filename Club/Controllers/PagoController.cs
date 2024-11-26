@@ -21,7 +21,6 @@ namespace Club.Controllers
         [Route("create-checkout-session")]
         public IActionResult CreateCheckoutSession()
         {
-            // Recuperar el carrito de la sesión
             var carritoJson = HttpContext.Session.GetString("Carrito");
             if (string.IsNullOrEmpty(carritoJson))
             {
@@ -31,49 +30,52 @@ namespace Club.Controllers
             var carrito = JsonConvert.DeserializeObject<List<dynamic>>(carritoJson);
 
             // Calcular el total
-            long totalCentavos = 0;
-            var nombresProductos = new List<string>();
+            double total = carrito.Sum(item => (double)item.Precio);
 
-            foreach (var item in carrito)
+            // Aplicar descuento si existe
+            var descuentoStr = HttpContext.Session.GetString("Descuento");
+            if (!string.IsNullOrEmpty(descuentoStr))
             {
-                totalCentavos += (long)(item.Precio * 100); // Convertir a centavos
-                nombresProductos.Add((string)item.NombreEspacio); // Agregar el nombre del espacio
+                double descuento = double.Parse(descuentoStr);
+                total -= descuento;
             }
 
+            long totalCentavos = (long)(total * 100); // Convertir a centavos
+
+            var nombresProductos = carrito.Select(item => (string)item.NombreEspacio).ToList();
             var nombreProducto = nombresProductos.Count > 1
                 ? $"{nombresProductos[0]} + {nombresProductos.Count - 1} más"
                 : nombresProductos[0];
 
-            // Crear una sesión de Stripe
             var options = new SessionCreateOptions
             {
                 LineItems = new List<SessionLineItemOptions>
+        {
+            new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
                 {
-                    new SessionLineItemOptions
+                    UnitAmount = totalCentavos,
+                    Currency = "pen",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
-                        PriceData = new SessionLineItemPriceDataOptions
-                        {
-                            UnitAmount = totalCentavos,
-                            Currency = "pen",
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
-                            {
-                                Name = nombreProducto
-                            }
-                        },
-                        Quantity = 1
+                        Name = nombreProducto
                     }
                 },
+                Quantity = 1
+            }
+        },
                 Mode = "payment",
                 UiMode = "embedded",
                 ReturnUrl = $"{Request.Scheme}://{Request.Host}/Pago/Return?session_id={{CHECKOUT_SESSION_ID}}",
             };
-
 
             var service = new SessionService();
             var session = service.Create(options);
 
             return Json(new { clientSecret = session.ClientSecret });
         }
+
 
         [HttpGet]
         [Route("session-status")]
