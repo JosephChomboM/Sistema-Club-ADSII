@@ -113,59 +113,17 @@ namespace Club.Controllers
                 return View(new List<dynamic>());
             }
 
-            var usuarioId = HttpContext.Session.GetString("UsuarioId");
-            if (string.IsNullOrEmpty(usuarioId))
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-
-            var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == int.Parse(usuarioId));
-            if (usuario == null)
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-
             var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
-            var resumenConClubes = new List<dynamic>();
 
-            foreach (var item in listaCarrito)
-            {
-                int espacioId = (int)item.EspacioId;
+            var descuentoStr = HttpContext.Session.GetString("Descuento");
+            double descuento = string.IsNullOrEmpty(descuentoStr) ? 0 : double.Parse(descuentoStr);
 
-                var espacio = _context.Espacios.Include(e => e.Lugar)
-                                .FirstOrDefault(e => e.EspacioId == espacioId);
+            ViewData["DescuentoAplicado"] = descuento;
+            ViewData["Total"] = listaCarrito.Sum(item => (double)item.Precio) - descuento;
 
-                if (espacio != null)
-                {
-                    resumenConClubes.Add(new
-                    {
-                        NombreEspacio = espacio.Nombre,
-                        FechaInicio = item.FechaInicio,
-                        FechaFin = item.FechaFin,
-                        Precio = item.Precio,
-                        NombreClub = espacio.Lugar.Nombre,
-                        DireccionClub = espacio.Lugar.Direccion,
-                        UsuarioEmail = usuario.Email,
-                        UsuarioNombre = usuario.Nombre,
-                        UsuarioApellido = usuario.Apellido,
-                        UsuarioDNI = usuario.DNI,
-                        UsuarioTelefono = usuario.Telefono,
-                        UsuarioDireccion = usuario.Direccion
-                    });
-                }
-            }
-
-            ViewData["Total"] = resumenConClubes.Sum(r => (double)r.Precio);
-
-            var totalConDescuento = HttpContext.Session.GetString("TotalConDescuento");
-            if (!string.IsNullOrEmpty(totalConDescuento))
-            {
-                ViewData["Total"] = double.Parse(totalConDescuento);
-                ViewData["DescuentoAplicado"] = resumenConClubes.Sum(r => (double)r.Precio) - double.Parse(totalConDescuento);
-            }
-
-            return View(resumenConClubes);
+            return View(listaCarrito);
         }
+
 
         // Aumentar una hora al espacio en el carrito
         [HttpPost]
@@ -222,7 +180,6 @@ namespace Club.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        [HttpPost]
         public IActionResult AplicarCupon(string cupon)
         {
             var carritoJson = HttpContext.Session.GetString("Carrito");
@@ -231,34 +188,23 @@ namespace Club.Controllers
                 TempData["MensajeError"] = "El carrito está vacío.";
                 return RedirectToAction("Resumen");
             }
-
             var carrito = JsonConvert.DeserializeObject<List<dynamic>>(carritoJson);
-
-            // Calcular el total
             double total = carrito.Sum(item => (double)item.Precio);
-
-            // Verificar el cupón
             double descuento = 0;
             if (cupon.ToUpper() == "MONTOYA")
             {
-                descuento = total * 0.90; 
-                total -= descuento;
-                ViewData["DescuentoAplicado"] = descuento;
+                descuento = total * 0.90; // Por ejemplo, un descuento fijo de 20
+                HttpContext.Session.SetString("Descuento", descuento.ToString());
+                TempData["Mensaje"] = $"Cupón aplicado. Descuento: S/ {descuento:F2}";
             }
             else
             {
-                TempData["MensajeError"] = "El cupón ingresado no es válido.";
+                TempData["Mensaje"] = "Cupón no válido.";
             }
-
-            // Actualizar el ViewData
-            ViewData["Total"] = total;
-
-            // Guardar el descuento en la sesión para usarlo en el pago
-            HttpContext.Session.SetString("Descuento", descuento.ToString());
-            HttpContext.Session.SetString("TotalConDescuento", total.ToString());
 
             return RedirectToAction("Resumen");
         }
+
 
 
 

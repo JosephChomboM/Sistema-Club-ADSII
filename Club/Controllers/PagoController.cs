@@ -105,7 +105,7 @@ namespace Club.Controllers
 
             if (session.PaymentStatus == "paid")
             {
-                // Limpiar el carrito
+                // Recuperar el carrito
                 var carritoJson = HttpContext.Session.GetString("Carrito");
                 if (string.IsNullOrEmpty(carritoJson))
                 {
@@ -115,11 +115,18 @@ namespace Club.Controllers
                 var listaCarrito = JsonConvert.DeserializeObject<List<dynamic>>(carritoJson);
                 var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
 
-                // Crear el pago
+                // Recuperar el descuento desde la sesión
+                var descuentoStr = HttpContext.Session.GetString("Descuento");
+                decimal descuento = string.IsNullOrEmpty(descuentoStr) ? 0 : decimal.Parse(descuentoStr);
+
+                // Calcular el total con descuento
+                decimal total = listaCarrito.Sum(item => (decimal)item.Precio) - descuento;
+
+                // Crear el pago (sin incluir el descuento como campo separado)
                 var nuevoPago = new Pago
                 {
                     UsuarioId = usuarioId,
-                    Total = listaCarrito.Sum(item => (decimal)item.Precio),
+                    Total = total,
                     Estado = "Confirmado",
                     FechaPago = DateTime.Now
                 };
@@ -136,12 +143,12 @@ namespace Club.Controllers
                         FechaInicio = (DateTime)item.FechaInicio,
                         FechaFin = (DateTime)item.FechaFin,
                         Detalles = "Reserva confirmada",
-                        PagoId = nuevoPago.Id // Asocia el pago a la reservación
+                        PagoId = nuevoPago.Id // Asociar el pago
                     };
 
                     _context.Reservaciones.Add(reservacion);
 
-                    // Crear notificación personalizada
+                    // Crear notificación
                     var espacio = _context.Espacios.FirstOrDefault(e => e.EspacioId == reservacion.EspacioId);
                     var notificacion = new Notificacion
                     {
@@ -152,17 +159,19 @@ namespace Club.Controllers
 
                     _context.Notificaciones.Add(notificacion);
                 }
+
                 _context.SaveChanges();
 
-                // Limpia el carrito de la sesión
+                // Limpiar el carrito y el descuento de la sesión
                 HttpContext.Session.Remove("Carrito");
+                HttpContext.Session.Remove("Descuento");
 
-                // Redirige a ConsultarReservas
                 return RedirectToAction("ConsultarReservas", "Reservacion");
             }
 
             return RedirectToAction("Error", "Home");
         }
+
 
 
 
