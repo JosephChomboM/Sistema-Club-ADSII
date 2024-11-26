@@ -34,9 +34,6 @@
                         <a asp-controller="Home" asp-action="About" class="nav-link">About</a>
                     </li>
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Events" class="nav-link">Events</a>
-                    </li>
-                    <li class="nav-item">
                         <a asp-controller="Home" asp-action="Contact" class="nav-link">Contact</a>
                     </li>
                     <li class="nav-item">
@@ -49,10 +46,10 @@
                     {
                         <!-- Admin-Specific Links -->
                         <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="Panel" class="nav-link"><i class="bi bi-speedometer2"></i> Admin Panel</a>
+                            <a asp-controller="Admin" asp-action="Panel" class="nav-link"><i class="bi bi-speedometer2"></i> Panel</a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Notificaciones" asp-action="Crear" class="nav-link"><i class="bi bi-envelope"></i> Crear Notificación</a>
+                            <a asp-controller="Notificaciones" asp-action="Crear" class="nav-link"><i class="bi bi-envelope"></i> Mensajes</a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Admin" asp-action="Logout" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
@@ -76,7 +73,7 @@
                     {
                         <!-- Login Options -->
                         <li class="nav-item">
-                            <a asp-controller="Usuario" asp-action="Login" class="nav-link"><i class="bi bi-person"></i> Login Usuario</a>
+                            <a asp-controller="Usuario" asp-action="Login" class="nav-link"><i class="bi bi-person"></i> Login</a>
                         </li>
                     }
                 </ul>
@@ -90,62 +87,7 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            cargarNotificaciones();
-
-            async function cargarNotificaciones() {
-                try {
-                    const response = await fetch('/Notificacion/ObtenerNotificaciones');
-                    const data = await response.json();
-
-                    if (data.success) {
-                        const notificaciones = data.notificaciones;
-                        const notificationList = document.getElementById('notificationList');
-                        const notificationCount = document.getElementById('notificationCount');
-
-                        // Limpia la lista de notificaciones
-                        notificationList.innerHTML = '';
-
-                        if (notificaciones.length > 0) {
-                            notificationCount.textContent = notificaciones.length;
-
-                            notificaciones.forEach(n => {
-                                const li = document.createElement('li');
-                                li.innerHTML = `<a class="dropdown-item" href="#" onclick="marcarComoLeida(${n.NotificacionId})">
-                                                ${n.Mensaje} <br><small>${new Date(n.Fecha).toLocaleString()}</small>
-                                            </a>`;
-                                notificationList.appendChild(li);
-                            });
-                        } else {
-                            notificationCount.textContent = '0';
-                            notificationList.innerHTML = `<li><a class="dropdown-item text-center">No tienes notificaciones</a></li>`;
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error cargando notificaciones:', error);
-                }
-            }
-
-
-            window.marcarComoLeida = async function (id) {
-                try {
-                    const response = await fetch('/Notificacion/MarcarComoLeida', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id })
-                    });
-                    const data = await response.json();
-                    if (data.success) {
-                        cargarNotificaciones(); // Recargar la lista de notificaciones
-                    }
-                } catch (error) {
-                    console.error('Error marcando como leída:', error);
-                }
-            };
-        });
-    </script>
+    
 
 </body>
 </html>

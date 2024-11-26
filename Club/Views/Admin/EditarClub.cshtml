@@ -2,31 +2,85 @@
 
 @{
     ViewData["Title"] = "Editar Club";
+    var espacios = Model.Espacios.ToList(); // Convertimos a List para manejar índices
 }
 
 <h2>Editar Club</h2>
 
 <form asp-action="EditarClub" method="post">
     <input type="hidden" asp-for="LugarId" />
+
     <div class="mb-3">
-        <label for="Nombre" class="form-label">Nombre</label>
+        <label asp-for="Nombre" class="form-label">Nombre</label>
         <input asp-for="Nombre" class="form-control" />
         <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
+
     <div class="mb-3">
-        <label for="Direccion" class="form-label">Dirección</label>
+        <label asp-for="Direccion" class="form-label">Dirección</label>
         <input asp-for="Direccion" class="form-control" />
         <span asp-validation-for="Direccion" class="text-danger"></span>
     </div>
+
     <div class="mb-3">
-        <label for="Descripcion" class="form-label">Descripción</label>
+        <label asp-for="Descripcion" class="form-label">Descripción</label>
         <textarea asp-for="Descripcion" class="form-control"></textarea>
         <span asp-validation-for="Descripcion" class="text-danger"></span>
     </div>
+
     <div class="mb-3">
-        <label for="LogoUrl" class="form-label">URL del Logo</label>
+        <label asp-for="LogoUrl" class="form-label">URL del Logo</label>
         <input asp-for="LogoUrl" class="form-control" />
         <span asp-validation-for="LogoUrl" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Actualizar</button>
+
+    <h3>Espacios del Club</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="espaciosTable">
+            @for (var i = 0; i < espacios.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" name="espacios[@i].EspacioId" value="@espacios[i].EspacioId" />
+                        <input type="text" name="espacios[@i].Nombre" value="@espacios[i].Nombre" class="form-control" />
+                    </td>
+                    <td>
+                        <input type="number" name="espacios[@i].Precio" value="@espacios[i].Precio" class="form-control" step="0.01" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" id="agregarEspacio">Agregar Espacio</button>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>
+
+<script>
+    document.getElementById('agregarEspacio').addEventListener('click', function () {
+        const tableBody = document.getElementById('espaciosTable');
+        const rowCount = tableBody.children.length; // Obtén el número actual de filas
+        const newRow = `
+                <tr>
+                    <td><input type="text" name="espacios[${rowCount}].Nombre" class="form-control" /></td>
+                    <td><input type="number" name="espacios[${rowCount}].Precio" class="form-control" step="0.01" /></td>
+                    <td><button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                </tr>`;
+        tableBody.insertAdjacentHTML('beforeend', newRow);
+    });
+
+    function eliminarFila(button) {
+        button.closest('tr').remove();
+    }
+</script>

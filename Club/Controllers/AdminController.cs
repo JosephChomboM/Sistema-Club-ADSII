@@ -2,6 +2,8 @@
 using Club.Data;
 using Club.Models;
 using BCrypt.Net;
+using Club.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Club.Controllers
 {
@@ -82,11 +84,14 @@ namespace Club.Controllers
             return RedirectToAction("Panel");
         }
 
-        // GET: Edit a club
+        // GET: Edit Club and its Espacios
         [HttpGet]
         public IActionResult EditarClub(int id)
         {
-            var lugar = _context.Lugares.FirstOrDefault(l => l.LugarId == id);
+            var lugar = _context.Lugares
+                .Include(l => l.Espacios) // Incluimos los espacios asociados al club
+                .FirstOrDefault(l => l.LugarId == id);
+
             if (lugar == null)
             {
                 return NotFound();
@@ -95,21 +100,75 @@ namespace Club.Controllers
             return View(lugar);
         }
 
-        // POST: Edit a club
+        // POST: Save Club and its Espacios
         [HttpPost]
-        public IActionResult EditarClub(Lugar lugar)
+        public IActionResult EditarClub(Lugar lugar, List<Espacio> espacios)
         {
-            if (!ModelState.IsValid)
+            // Buscar el lugar existente con sus espacios
+            var lugarExistente = _context.Lugares
+                .Include(l => l.Espacios) // Incluye los espacios para poder trabajar con ellos
+                .FirstOrDefault(l => l.LugarId == lugar.LugarId);
+
+            if (lugarExistente == null)
             {
-                return View(lugar);
+                return NotFound();
             }
 
-            _context.Lugares.Update(lugar);
+            // Actualizar datos del lugar
+            lugarExistente.Nombre = lugar.Nombre;
+            lugarExistente.Direccion = lugar.Direccion;
+            lugarExistente.Descripcion = lugar.Descripcion;
+            lugarExistente.LogoUrl = lugar.LogoUrl;
+
+            // Espacios existentes en la base de datos
+            var espaciosExistentes = lugarExistente.Espacios.ToList();
+
+            // Actualizar o agregar espacios
+            foreach (var espacioActualizado in espacios)
+            {
+                var espacioExistente = espaciosExistentes
+                    .FirstOrDefault(e => e.EspacioId == espacioActualizado.EspacioId);
+
+                if (espacioExistente != null)
+                {
+                    // Actualizar espacio existente
+                    espacioExistente.Nombre = espacioActualizado.Nombre;
+                    espacioExistente.Precio = espacioActualizado.Precio;
+                }
+                else
+                {
+                    // Agregar nuevo espacio
+                    lugarExistente.Espacios.Add(new Espacio
+                    {
+                        Nombre = espacioActualizado.Nombre,
+                        Precio = espacioActualizado.Precio,
+                        LugarId = lugar.LugarId
+                    });
+                }
+            }
+
+            // Eliminar espacios no enviados
+            var idsEspaciosEnviados = espacios.Select(e => e.EspacioId).ToList();
+            var espaciosParaEliminar = espaciosExistentes
+                .Where(e => !idsEspaciosEnviados.Contains(e.EspacioId))
+                .ToList();
+
+            foreach (var espacioEliminado in espaciosParaEliminar)
+            {
+                _context.Espacios.Remove(espacioEliminado);
+            }
+
+            // Guardar cambios en la base de datos
             _context.SaveChanges();
 
-            TempData["Mensaje"] = "Club actualizado exitosamente.";
+            TempData["Mensaje"] = "Club y espacios actualizados correctamente.";
             return RedirectToAction("Panel");
         }
+
+
+
+
+
 
         // GET: Delete a club
         [HttpGet]
