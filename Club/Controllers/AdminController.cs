@@ -213,21 +213,36 @@ namespace Club.Controllers
         }
 
         // POST: Confirm deletion
+        // POST: Confirmar eliminación
         [HttpPost]
+        [ValidateAntiForgeryToken] // Protección contra ataques CSRF
         public IActionResult ConfirmarEliminarClub(int id)
         {
-            var lugar = _context.Lugares.FirstOrDefault(l => l.LugarId == id);
+            // Buscar el club a eliminar
+            var lugar = _context.Lugares
+                .Include(l => l.Espacios) // Incluye los espacios relacionados para eliminarlos también
+                .FirstOrDefault(l => l.LugarId == id);
+
             if (lugar == null)
             {
-                return NotFound();
+                TempData["Error"] = "El club que intentas eliminar no existe.";
+                return RedirectToAction("Panel");
             }
 
+            // Eliminar los espacios relacionados primero (si existen)
+            if (lugar.Espacios.Any())
+            {
+                _context.Espacios.RemoveRange(lugar.Espacios);
+            }
+
+            // Eliminar el club
             _context.Lugares.Remove(lugar);
             _context.SaveChanges();
 
             TempData["Mensaje"] = "Club eliminado exitosamente.";
             return RedirectToAction("Panel");
         }
+
 
         // Logout Admin
         public IActionResult Logout()

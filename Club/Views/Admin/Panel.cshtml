@@ -38,9 +38,11 @@
                             <a asp-action="EditarClub" asp-route-id="@club.LugarId" class="clubsmart-btn clubsmart-btn-warning clubsmart-btn-sm">
                                 <i class="bi bi-pencil"></i> Editar
                             </a>
-                            <a asp-action="EliminarClub" asp-route-id="@club.LugarId" class="clubsmart-btn clubsmart-btn-danger clubsmart-btn-sm">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </a>
+                            <form asp-action="ConfirmarEliminarClub" asp-route-id="@club.LugarId" method="post" style="display:inline;">
+                                <button type="submit" class="clubsmart-btn clubsmart-btn-danger clubsmart-btn-sm">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }
