@@ -34,12 +34,9 @@
         }
     </div>
 
-    <!-- Add Create Admin button if logged in -->
     <div class="col-md-4">
-        @if (Context.Session.GetString("AdminEmail") != null)
-        {
-            <h4>Opciones de Administración</h4>
-            <a asp-action="CrearAdmin" asp-controller="Admin" class="btn btn-secondary">Crear Nuevo Admin</a>
-        }
+        <h4>Opciones de Administración</h4>
+        <a asp-action="CrearAdmin" asp-controller="Admin" class="btn btn-secondary">Crear Nuevo Admin</a>
     </div>
+
 </div>

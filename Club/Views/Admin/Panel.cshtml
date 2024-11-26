@@ -1,17 +1,36 @@
-﻿@{
-    ViewData["Title"] = "Panel de Administración";
+﻿@model IEnumerable<Club.Models.Lugar>
+
+@{
+    ViewData["Title"] = "Administrar Clubes";
 }
 
-<h2>Panel de Administración</h2>
+<h2>Administrar Clubes</h2>
 
-<p>Bienvenido al sistema de administración.</p>
+<a asp-action="CrearClub" class="btn btn-success mb-3">Crear Nuevo Club</a>
 
-<ul>
-    <li><a asp-controller="Usuario" asp-action="Index">Gestión de Usuarios</a></li>
-    <li><a asp-controller="Reservacion" asp-action="Index">Gestión de Reservaciones</a></li>
-    <li><a asp-controller="Notificaciones" asp-action="Index">Enviar Notificaciones</a></li>
-</ul>
-
-<form asp-action="Logout" method="post">
-    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
-</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Logo</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var club in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@club.LogoUrl" alt="@club.Nombre" width="50" height="50" style="object-fit: contain;" />
+                </td>
+                <td>@club.Nombre</td>
+                <td>@club.Direccion</td>
+                <td>
+                    <a asp-action="EditarClub" asp-route-id="@club.LugarId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="EliminarClub" asp-route-id="@club.LugarId" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

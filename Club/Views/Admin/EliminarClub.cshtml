@@ -1,0 +1,15 @@
+﻿@model Club.Models.Lugar
+
+@{
+    ViewData["Title"] = "Eliminar Club";
+}
+
+<h2>Eliminar Club</h2>
+
+<p>¿Está seguro que desea eliminar el club "<strong>@Model.Nombre</strong>"?</p>
+
+<form asp-action="ConfirmarEliminarClub" method="post">
+    <input type="hidden" asp-for="LugarId" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Clubes" class="btn btn-secondary">Cancelar</a>
+</form>

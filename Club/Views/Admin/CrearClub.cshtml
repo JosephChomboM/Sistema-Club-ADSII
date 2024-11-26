@@ -1,0 +1,31 @@
+﻿@model Club.Models.Lugar
+
+@{
+    ViewData["Title"] = "Crear Club";
+}
+
+<h2>Crear Nuevo Club</h2>
+
+<form asp-action="CrearClub" method="post">
+    <div class="mb-3">
+        <label for="Nombre" class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Direccion" class="form-label">Dirección</label>
+        <input asp-for="Direccion" class="form-control" />
+        <span asp-validation-for="Direccion" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Descripcion" class="form-label">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="LogoUrl" class="form-label">URL del Logo</label>
+        <input asp-for="LogoUrl" class="form-control" />
+        <span asp-validation-for="LogoUrl" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

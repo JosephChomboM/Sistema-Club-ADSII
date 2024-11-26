@@ -53,16 +53,92 @@ namespace Club.Controllers
             return RedirectToAction("Panel");
         }
 
-
-        // Admin Dashboard (Panel)
         public IActionResult Panel()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("AdminEmail")))
+            var clubes = _context.Lugares.ToList();
+            return View(clubes);
+        }
+
+        // GET: Create a new club
+        [HttpGet]
+        public IActionResult CrearClub()
+        {
+            return View();
+        }
+
+        // POST: Create a new club
+        [HttpPost]
+        public IActionResult CrearClub(Lugar lugar)
+        {
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction("LoginAdmin");
+                return View(lugar);
             }
 
-            return View();
+            _context.Lugares.Add(lugar);
+            _context.SaveChanges();
+
+            TempData["Mensaje"] = "Club creado exitosamente.";
+            return RedirectToAction("Panel");
+        }
+
+        // GET: Edit a club
+        [HttpGet]
+        public IActionResult EditarClub(int id)
+        {
+            var lugar = _context.Lugares.FirstOrDefault(l => l.LugarId == id);
+            if (lugar == null)
+            {
+                return NotFound();
+            }
+
+            return View(lugar);
+        }
+
+        // POST: Edit a club
+        [HttpPost]
+        public IActionResult EditarClub(Lugar lugar)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(lugar);
+            }
+
+            _context.Lugares.Update(lugar);
+            _context.SaveChanges();
+
+            TempData["Mensaje"] = "Club actualizado exitosamente.";
+            return RedirectToAction("Panel");
+        }
+
+        // GET: Delete a club
+        [HttpGet]
+        public IActionResult EliminarClub(int id)
+        {
+            var lugar = _context.Lugares.FirstOrDefault(l => l.LugarId == id);
+            if (lugar == null)
+            {
+                return NotFound();
+            }
+
+            return View(lugar);
+        }
+
+        // POST: Confirm deletion
+        [HttpPost]
+        public IActionResult ConfirmarEliminarClub(int id)
+        {
+            var lugar = _context.Lugares.FirstOrDefault(l => l.LugarId == id);
+            if (lugar == null)
+            {
+                return NotFound();
+            }
+
+            _context.Lugares.Remove(lugar);
+            _context.SaveChanges();
+
+            TempData["Mensaje"] = "Club eliminado exitosamente.";
+            return RedirectToAction("Panel");
         }
 
         // Logout Admin
@@ -75,7 +151,13 @@ namespace Club.Controllers
         [HttpGet]
         public IActionResult CrearAdmin()
         {
-            // Ensure only logged-in admins can access this
+            // Allow access without session validation for the first admin creation
+            if (!_context.Admins.Any())
+            {
+                return View(); // Allow access if no admin exists
+            }
+
+            // Require session validation if admins exist
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("AdminEmail")))
             {
                 return RedirectToAction("LoginAdmin");
@@ -87,12 +169,23 @@ namespace Club.Controllers
         [HttpPost]
         public IActionResult CrearAdmin(Admin admin)
         {
-            // Ensure only logged-in admins can access this
+            // Allow access without session validation for the first admin creation
+            if (!_context.Admins.Any())
+            {
+                return SaveAdmin(admin); // Directly save if no admin exists
+            }
+
+            // Require session validation if admins exist
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("AdminEmail")))
             {
                 return RedirectToAction("LoginAdmin");
             }
 
+            return SaveAdmin(admin);
+        }
+
+        private IActionResult SaveAdmin(Admin admin)
+        {
             if (!ModelState.IsValid)
             {
                 return View(admin);
@@ -115,6 +208,5 @@ namespace Club.Controllers
             TempData["Mensaje"] = "Administrador creado exitosamente.";
             return RedirectToAction("Panel");
         }
-
     }
 }
